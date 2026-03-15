@@ -1,0 +1,29 @@
+@startuml c4-containers
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+LAYOUT_WITH_LEGEND()
+
+title Diagrama de Containers — Aí 'Se Cream (C4 Nível 2)
+
+Person(admin, "Administrador", "Gerencia lojas, lotes, distribuições e usuários.")
+Person(operador, "Operador de Produção", "Registra lotes de produção e baixas de estoque.")
+
+System_Boundary(aisecrean, "Aí 'Se Cream") {
+
+    Container(api, "API REST", "Java 21 · Spring Boot 3", "Expõe os endpoints REST. Contém os Controllers, Services e Repositories. Aplica as regras de negócio (validação de saldo, atomicidade das operações).")
+
+    Container(security, "Módulo de Segurança", "Spring Security · JWT", "Autentica usuários via e-mail e senha. Emite e valida tokens JWT. Aplica controle de acesso por perfil (ADMIN / OPERADOR).")
+
+    ContainerDb(db, "Banco de Dados", "MariaDB", "Armazena sabores, lotes de produção, lojas, distribuições, baixas de estoque e usuários. Schema versionado pelo Flyway.")
+
+}
+
+Rel(admin, api, "Utiliza via navegador ou cliente HTTP", "HTTPS / JSON")
+Rel(operador, api, "Utiliza via navegador ou cliente HTTP", "HTTPS / JSON")
+
+Rel(api, security, "Delega autenticação e autorização")
+Rel(security, api, "Retorna identidade e perfil do usuário autenticado")
+
+Rel(api, db, "Lê e escreve dados", "JPA / Hibernate · TCP 3306")
+
+@enduml
