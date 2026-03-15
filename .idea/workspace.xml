@@ -5,8 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3b7c2b9a-5cbd-466b-97cf-d2a111afbbb1" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/architecture/c4-nivel2-containers.puml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/architecture/bdd-ai'secream.drawio.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/bdd/aisecrean.sql" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -54,6 +54,7 @@
 }</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\gab\Desktop\bararara\aisecream\src\bdd" />
       <recent name="C:\Users\gab\Desktop\bararara\aisecream\src\architecture" />
     </key>
   </component>
@@ -76,6 +77,7 @@
       <workItem from="1773550149039" duration="110000" />
       <workItem from="1773551021947" duration="159000" />
       <workItem from="1773551192891" duration="220000" />
+      <workItem from="1773552883734" duration="230000" />
     </task>
     <servers />
   </component>
