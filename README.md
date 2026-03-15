@@ -1,4 +1,8 @@
 
+Apresente em um repositório (readme/wiki) o domínio de problema a ser implementado (caso queira inserir RF e RNF, show);
+Apresente as principais tecnologias com as respectivas justificativas de escolha;
+
+será uma aplicação web feita com java (spring boot) e maria db
 
 ## 1. Descrição do Projeto
 O **AÍ 'SE CREAM** é uma aplicação web baseada em **arquitetura monolitica**, desenvolvida para gerenciar a produção e distribuição de sorvetes de uma fábrica central para as lojas da marca.
