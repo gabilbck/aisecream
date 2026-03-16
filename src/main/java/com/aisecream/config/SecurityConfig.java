@@ -1,4 +1,4 @@
-package com.aisecrean.config;
+package com.aisecream.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

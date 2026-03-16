@@ -1,13 +1,13 @@
-package com.aisecrean;
+package com.aisecream;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class AisecreanApplication {
+public class AisecreamApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(AisecreanApplication.class, args);
+		SpringApplication.run(AisecreamApplication.class, args);
 	}
 
 }

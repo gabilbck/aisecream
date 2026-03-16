@@ -1,6 +1,6 @@
-package com.aisecrean.repository;
+package com.aisecream.repository;
 
-import com.aisecrean.model.Sabor;
+import com.aisecream.model.Sabor;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

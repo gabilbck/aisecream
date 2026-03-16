@@ -5,27 +5,25 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3b7c2b9a-5cbd-466b-97cf-d2a111afbbb1" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/aisecrean/config/SecurityConfig.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/aisecrean/controller/HomeController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/aisecrean/controller/SaborController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/aisecrean/model/BaixaEstoque.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/aisecrean/model/Distribuicao.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/aisecrean/model/Loja.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/aisecrean/model/LoteProducao.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/aisecrean/model/Sabor.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/aisecrean/model/Usuario.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/aisecrean/model/enums/Perfil.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/aisecrean/model/enums/StatusDistribuicao.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/aisecrean/repository/SaborRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/aisecrean/service/SaborService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/templates/sabor/form.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/templates/sabor/listar.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/templates/txt.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/bdd/aisecrean.sql" beforeDir="false" afterPath="$PROJECT_DIR$/src/bdd/aisecream.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/aisecrean/AisecreanApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/aisecream/AisecreamApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/aisecrean/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/aisecream/config/SecurityConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/aisecrean/controller/HomeController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/aisecream/controller/HomeController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/aisecrean/controller/SaborController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/aisecream/controller/SaborController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/aisecrean/model/BaixaEstoque.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/aisecream/model/BaixaEstoque.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/aisecrean/model/Distribuicao.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/aisecream/model/Distribuicao.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/aisecrean/model/Loja.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/aisecream/model/Loja.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/aisecrean/model/LoteProducao.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/aisecream/model/LoteProducao.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/aisecrean/model/Sabor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/aisecream/model/Sabor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/aisecrean/model/Usuario.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/aisecream/model/Usuario.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/aisecrean/model/enums/Perfil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/aisecream/model/enums/Perfil.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/aisecrean/model/enums/StatusDistribuicao.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/aisecream/model/enums/StatusDistribuicao.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/aisecrean/repository/SaborRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/aisecream/repository/SaborRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/aisecrean/service/SaborService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/aisecream/service/SaborService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/aisecrean/AisecreanApplicationTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/aisecream/AisecreanApplicationTests.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -64,6 +62,10 @@
   "keyToString": {
     "JUnit.All in aisecrean.executor": "Run",
     "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RequestMappingsPanelOrder0": "0",
+    "RequestMappingsPanelOrder1": "1",
+    "RequestMappingsPanelWidth0": "75",
+    "RequestMappingsPanelWidth1": "75",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
     "RunOnceActivity.git.unshallow": "true",
@@ -77,6 +79,7 @@
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "project.propCompiler",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
@@ -92,7 +95,7 @@
       <recent name="C:\Users\gab\Desktop\bararara\aisecream\src\main\java\com\aisecrean\model" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.All in aisecrean">
+  <component name="RunManager" selected="Spring Boot.AisecreanApplication">
     <configuration name="All in aisecrean" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="aisecrean" />
       <option name="PACKAGE_NAME" value="" />
@@ -137,6 +140,9 @@
       <workItem from="1773552883734" duration="230000" />
       <workItem from="1773553662045" duration="5363000" />
       <workItem from="1773583628404" duration="2512000" />
+      <workItem from="1773586280988" duration="42000" />
+      <workItem from="1773629513392" duration="529000" />
+      <workItem from="1773697967972" duration="4089000" />
     </task>
     <servers />
   </component>

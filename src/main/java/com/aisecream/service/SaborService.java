@@ -1,7 +1,7 @@
-package com.aisecrean.service;
+package com.aisecream.service;
 
-import com.aisecrean.model.Sabor;
-import com.aisecrean.repository.SaborRepository;
+import com.aisecream.model.Sabor;
+import com.aisecream.repository.SaborRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 

@@ -1,7 +1,10 @@
-package com.aisecrean.model;
+package com.aisecream.model;
 
+import com.aisecream.model.enums.Perfil;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -9,11 +12,11 @@ import lombok.Setter;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "loja")
+@Table(name = "usuario")
 @Getter
 @Setter
 @NoArgsConstructor
-public class Loja {
+public class Usuario {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,11 +27,18 @@ public class Loja {
     private String nome;
 
     @NotBlank
-    @Column(nullable = false, length = 255)
-    private String endereco;
+    @Email
+    @Column(nullable = false, unique = true, length = 150)
+    private String email;
 
-    @Column(length = 20)
-    private String telefone;
+    @NotBlank
+    @Column(name = "senha_hash", nullable = false)
+    private String senhaHash;
+
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Perfil perfil;
 
     @Column(nullable = false)
     private Boolean ativo = true;

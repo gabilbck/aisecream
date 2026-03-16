@@ -1,4 +1,4 @@
-package com.aisecrean.model;
+package com.aisecream.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;

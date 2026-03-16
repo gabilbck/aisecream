@@ -1,4 +1,4 @@
-package com.aisecrean;
+package com.aisecream;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

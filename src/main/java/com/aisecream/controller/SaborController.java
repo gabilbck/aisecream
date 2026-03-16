@@ -1,7 +1,7 @@
-package com.aisecrean.controller;
+package com.aisecream.controller;
 
-import com.aisecrean.model.Sabor;
-import com.aisecrean.service.SaborService;
+import com.aisecream.model.Sabor;
+import com.aisecream.service.SaborService;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

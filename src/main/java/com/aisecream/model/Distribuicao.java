@@ -1,6 +1,6 @@
-package com.aisecrean.model;
+package com.aisecream.model;
 
-import com.aisecrean.model.enums.StatusDistribuicao;
+import com.aisecream.model.enums.StatusDistribuicao;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;

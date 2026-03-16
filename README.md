@@ -55,10 +55,10 @@ Packaging: Jar
 Java: 21
 Project Metadata — sugestão:
 
-Group: com.aisecrean (ou o nome da sua empresa/faculdade)
+Group: com.aisecream (ou o nome da sua empresa/faculdade)
 Artifact: aisecrean
 Name: aisecrean
-Package name: com.aisecrean
+Package name: com.aisecream
 Dependencies — clique em ADD DEPENDENCIES e adicione:
 
 Dependência	Para que serve

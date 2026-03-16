@@ -1,4 +1,4 @@
-package com.aisecrean.model.enums;
+package com.aisecream.model.enums;
 
 public enum Perfil {
     ADMIN,
