@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,7 +7,15 @@
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { font-family: Arial, sans-serif; background: #f5f5f5; color: #333; }
-        nav { background: #1a1a2e; padding: 14px 24px; display: flex; align-items: center; gap: 24px; }
+        nav { background: #1a1a2e; padding: 14px 24px; display: flex; align-items: center; flex-wrap: wrap; gap: 16px 24px; }
+        nav .nav-spacer { flex: 1; min-width: 8px; }
+        nav .nav-logout { margin: 0; }
+        nav .btn-nav-logout {
+            background: transparent; color: #e8c84a; border: 1px solid #e8c84a;
+            padding: 6px 14px; border-radius: 5px; font-size: 13px; font-weight: 600;
+            cursor: pointer; font-family: inherit;
+        }
+        nav .btn-nav-logout:hover { background: rgba(232, 200, 74, 0.15); color: #fff; border-color: #fff; }
         nav .brand { color: #e8c84a; font-size: 18px; font-weight: bold; text-decoration: none; }
         nav a { color: #ccc; text-decoration: none; font-size: 14px; }
         nav a:hover { color: #fff; }
@@ -34,21 +42,14 @@
 </head>
 <body>
 
-<nav>
-    <a class="brand" href="/">🍦 Aí 'Se Cream</a>
-    <a href="/sabores">Sabores</a>
-    <a href="/lojas">Lojas</a>
-    <a href="/lotes">Lotes</a>
-    <a href="/distribuicoes">Distribuições</a>
-    <a href="/baixas">Baixas</a>
-</nav>
+<div th:replace="~{fragments/nav :: main}"></div>
 
 <div class="container">
     <div class="card">
 
         <div class="header-row">
             <h1>Sabores</h1>
-            <a href="/sabores/novo" class="btn btn-primary">+ Novo Sabor</a>
+            <a sec:authorize="hasRole('ADMIN')" th:href="@{/sabores/novo}" class="btn btn-primary">+ Novo Sabor</a>
         </div>
 
         <div th:if="${sucesso}" class="alert alert-success" th:text="${sucesso}"></div>
@@ -78,14 +79,19 @@
                         <span th:if="${sabor.ativo}" class="badge badge-success">Ativo</span>
                         <span th:unless="${sabor.ativo}" class="badge badge-danger">Inativo</span>
                     </td>
-                    <td style="display:flex; gap:6px;">
-                        <a th:href="@{/sabores/editar/{id}(id=${sabor.id})}" class="btn btn-warning">Editar</a>
-                        <form th:if="${sabor.ativo}"
-                              th:action="@{/sabores/inativar/{id}(id=${sabor.id})}"
-                              method="post"
-                              onsubmit="return confirm('Deseja inativar este sabor?')">
-                            <button type="submit" class="btn btn-danger">Inativar</button>
-                        </form>
+                    <td>
+                        <th:block sec:authorize="hasRole('ADMIN')">
+                            <div style="display:flex; gap:6px;">
+                                <a th:href="@{/sabores/editar/{id}(id=${sabor.id})}" class="btn btn-warning">Editar</a>
+                                <form th:if="${sabor.ativo}"
+                                      th:action="@{/sabores/inativar/{id}(id=${sabor.id})}"
+                                      method="post"
+                                      onsubmit="return confirm('Deseja inativar este sabor?')">
+                                    <button type="submit" class="btn btn-danger">Inativar</button>
+                                </form>
+                            </div>
+                        </th:block>
+                        <span sec:authorize="!hasRole('ADMIN')" style="color:#999;">—</span>
                     </td>
                 </tr>
             </tbody>

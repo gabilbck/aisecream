@@ -2,6 +2,7 @@ package com.aisecream.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -20,13 +21,16 @@ public class Loja {
     private Integer id;
 
     @NotBlank
+    @Size(max = 100)
     @Column(nullable = false, length = 100)
     private String nome;
 
     @NotBlank
     @Column(nullable = false, length = 255)
+    @Size(max = 255)
     private String endereco;
 
+    @Size(max = 20, message = "Telefone deve ter no máximo 20 caracteres.")
     @Column(length = 20)
     private String telefone;
 
