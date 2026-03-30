@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loja - Aí 'Se Cream</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: Arial, sans-serif; background: #f5f5f5; color: #333; }
+        nav { background: #1a1a2e; padding: 14px 24px; display: flex; align-items: center; flex-wrap: wrap; gap: 16px 24px; }
+        nav .nav-spacer { flex: 1; min-width: 8px; }
+        nav .nav-logout { margin: 0; }
+        nav .btn-nav-logout {
+            background: transparent; color: #e8c84a; border: 1px solid #e8c84a;
+            padding: 6px 14px; border-radius: 5px; font-size: 13px; font-weight: 600;
+            cursor: pointer; font-family: inherit;
+        }
+        nav .btn-nav-logout:hover { background: rgba(232, 200, 74, 0.15); color: #fff; border-color: #fff; }
+        nav .brand { color: #e8c84a; font-size: 18px; font-weight: bold; text-decoration: none; }
+        nav a { color: #ccc; text-decoration: none; font-size: 14px; }
+        nav a:hover { color: #fff; }
+        .container { max-width: 600px; margin: 32px auto; padding: 0 16px; }
+        .card { background: #fff; border-radius: 8px; padding: 24px; box-shadow: 0 1px 4px rgba(0,0,0,0.1); }
+        h1 { font-size: 22px; color: #1a1a2e; margin-bottom: 24px; }
+        .form-group { margin-bottom: 16px; }
+        label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; color: #555; }
+        input[type="text"], textarea, select {
+            width: 100%; padding: 9px 12px; border: 1px solid #ccc;
+            border-radius: 5px; font-size: 14px; font-family: Arial, sans-serif;
+        }
+        input:focus, textarea:focus, select:focus { outline: none; border-color: #1a1a2e; }
+        .error { color: #e74c3c; font-size: 12px; margin-top: 4px; }
+        .btn { display: inline-block; padding: 9px 20px; border-radius: 5px; font-size: 14px; font-weight: 600; cursor: pointer; text-decoration: none; border: none; }
+        .btn-primary { background: #1a1a2e; color: #fff; }
+        .btn-primary:hover { background: #2a2a4e; }
+        .btn-secondary { background: #aaa; color: #fff; }
+        .btn-secondary:hover { background: #888; }
+        .form-actions { display: flex; gap: 10px; margin-top: 24px; }
+    </style>
+</head>
+<body>
+
+<div th:replace="~{fragments/nav :: main}"></div>
+
+<div class="container">
+    <div class="card">
+
+        <h1 th:text="${loja.id != null ? 'Editar loja' : 'Nova loja'}"></h1>
+
+        <form th:if="${loja.id == null}"
+              th:action="@{/lojas/novo}"
+              th:object="${loja}"
+              method="post">
+
+            <div class="form-group">
+                <label for="nome">Nome *</label>
+                <input type="text" id="nome" th:field="*{nome}" placeholder="Ex: Sorveteria Centro" maxlength="100" />
+                <span class="error" th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="endereco">Endereço *</label>
+                <textarea id="endereco" th:field="*{endereco}" rows="3" placeholder="Rua, número, bairro, cidade" maxlength="255"></textarea>
+                <span class="error" th:if="${#fields.hasErrors('endereco')}" th:errors="*{endereco}"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="telefone">Telefone</label>
+                <input type="text" id="telefone" th:field="*{telefone}" placeholder="Opcional — ex: (11) 99999-9999" maxlength="20" />
+                <span class="error" th:if="${#fields.hasErrors('telefone')}" th:errors="*{telefone}"></span>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Salvar</button>
+                <a th:href="@{/lojas}" class="btn btn-secondary">Cancelar</a>
+            </div>
+        </form>
+
+        <form th:if="${loja.id != null}"
+              th:action="@{/lojas/editar/{id}(id=${loja.id})}"
+              th:object="${loja}"
+              method="post">
+
+            <div class="form-group">
+                <label for="nomeEdit">Nome *</label>
+                <input type="text" id="nomeEdit" th:field="*{nome}" maxlength="100" />
+                <span class="error" th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="enderecoEdit">Endereço *</label>
+                <textarea id="enderecoEdit" th:field="*{endereco}" rows="3" maxlength="255"></textarea>
+                <span class="error" th:if="${#fields.hasErrors('endereco')}" th:errors="*{endereco}"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="telefoneEdit">Telefone</label>
+                <input type="text" id="telefoneEdit" th:field="*{telefone}" maxlength="20" />
+                <span class="error" th:if="${#fields.hasErrors('telefone')}" th:errors="*{telefone}"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="ativo">Status</label>
+                <select id="ativo" th:field="*{ativo}">
+                    <option th:value="true">Ativa</option>
+                    <option th:value="false">Inativa</option>
+                </select>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Salvar</button>
+                <a th:href="@{/lojas}" class="btn btn-secondary">Cancelar</a>
+            </div>
+        </form>
+
+    </div>
+</div>
+
+</body>
+</html>

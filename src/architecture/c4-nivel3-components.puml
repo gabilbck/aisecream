@@ -1,0 +1,95 @@
+@startuml c4-components
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+
+title Diagrama de Componentes — Aí 'Se Cream (C4 Nível 3)
+
+Person(admin, "Administrador", "Gerencia lojas, lotes, distribuições e usuários.")
+Person(operador, "Operador de Produção", "Registra lotes de produção e baixas de estoque.")
+
+ContainerDb(db, "Banco de Dados", "MariaDB", "Armazena todos os dados do sistema. Schema versionado pelo Flyway.")
+
+Container_Boundary(api, "API REST — Java 21 · Spring Boot 3") {
+
+    ' ─── Segurança ───────────────────────────────────────────────
+    Component(securityConfig,   "SecurityConfig",         "Spring Security · @Configuration", "Configura filtros HTTP, rotas públicas/protegidas e controle de acesso por perfil (ADMIN / OPERADOR).")
+    Component(jwtFilter,        "JwtAuthFilter",          "OncePerRequestFilter",              "Intercepta cada requisição, extrai e valida o token JWT, e carrega o contexto de segurança.")
+    Component(jwtService,       "JwtService",             "Componente Spring",                 "Gera, assina e valida tokens JWT. Lê segredo e expiração do application.properties.")
+    Component(authController,   "AuthController",         "REST Controller · /auth",           "Endpoint de login: recebe e-mail + senha, autentica e retorna o token JWT.")
+
+    ' ─── Sabores ─────────────────────────────────────────────────
+    Component(saborController,  "SaborController",        "REST Controller · /sabores",        "CRUD de sabores: cadastrar, listar, editar e inativar.")
+    Component(saborService,     "SaborService",           "Service · @Transactional",          "Regras de negócio de sabores: validação de nome único, controle de status ativo/inativo.")
+    Component(saborRepo,        "SaborRepository",        "JpaRepository<Sabor, Long>",        "Acesso ao banco para a entidade Sabor.")
+
+    ' ─── Lotes de Produção ───────────────────────────────────────
+    Component(loteController,   "LoteProducaoController", "REST Controller · /lotes",          "Registra lotes de produção e lista com filtros por sabor, status e período.")
+    Component(loteService,      "LoteProducaoService",    "Service · @Transactional",          "Calcula e atualiza quantidade disponível do lote. Garante atomicidade.")
+    Component(loteRepo,         "LoteProducaoRepository", "JpaRepository<LoteProducao, Long>", "Acesso ao banco para a entidade LoteProducao.")
+
+    ' ─── Lojas ───────────────────────────────────────────────────
+    Component(lojaController,   "LojaController",         "REST Controller · /lojas",          "CRUD de lojas: cadastrar, listar e editar.")
+    Component(lojaService,      "LojaService",            "Service · @Transactional",          "Regras de negócio de lojas: validação de dados e controle de status ativo.")
+    Component(lojaRepo,         "LojaRepository",         "JpaRepository<Loja, Long>",         "Acesso ao banco para a entidade Loja.")
+
+    ' ─── Distribuição ────────────────────────────────────────────
+    Component(distController,   "DistribuicaoController", "REST Controller · /distribuicoes",  "Registra distribuições, lista histórico e cancela distribuições.")
+    Component(distService,      "DistribuicaoService",    "Service · @Transactional",          "Valida saldo do lote antes de distribuir. Estorna saldo no cancelamento. Garante atomicidade da operação.")
+    Component(distRepo,         "DistribuicaoRepository", "JpaRepository<Distribuicao, Long>", "Acesso ao banco para a entidade Distribuicao.")
+
+    ' ─── Estoque / Baixas ────────────────────────────────────────
+    Component(baixaController,  "BaixaEstoqueController", "REST Controller · /baixas",         "Registra baixas manuais de estoque e lista histórico por loja e período.")
+    Component(baixaService,     "BaixaEstoqueService",    "Service · @Transactional",          "Calcula saldo atual da loja (total recebido − total de baixas). Garante atomicidade.")
+    Component(baixaRepo,        "BaixaEstoqueRepository", "JpaRepository<BaixaEstoque, Long>", "Acesso ao banco para a entidade BaixaEstoque.")
+
+    ' ─── Usuários ────────────────────────────────────────────────
+    Component(usuarioService,   "UsuarioService",         "UserDetailsService",                "Carrega usuário pelo e-mail para autenticação. Gerencia cadastro com hash BCrypt.")
+    Component(usuarioRepo,      "UsuarioRepository",      "JpaRepository<Usuario, Long>",      "Acesso ao banco para a entidade Usuario.")
+
+}
+
+' ─── Pessoas → Controllers ────────────────────────────────────────────────────
+Rel(admin,    authController,   "POST /auth/login",             "HTTPS / JSON")
+Rel(operador, authController,   "POST /auth/login",             "HTTPS / JSON")
+Rel(admin,    saborController,  "CRUD /sabores",                "HTTPS / JSON")
+Rel(admin,    loteController,   "GET /lotes",                   "HTTPS / JSON")
+Rel(operador, loteController,   "POST /lotes",                  "HTTPS / JSON")
+Rel(admin,    lojaController,   "CRUD /lojas",                  "HTTPS / JSON")
+Rel(admin,    distController,   "CRUD /distribuicoes",          "HTTPS / JSON")
+Rel(operador, baixaController,  "POST /baixas",                 "HTTPS / JSON")
+Rel(admin,    baixaController,  "GET /baixas",                  "HTTPS / JSON")
+
+' ─── Segurança ────────────────────────────────────────────────────────────────
+Rel(jwtFilter,      jwtService,     "Valida token JWT")
+Rel(jwtFilter,      usuarioService, "Carrega usuário autenticado")
+Rel(authController, usuarioService, "Autentica credenciais")
+Rel(authController, jwtService,     "Solicita geração do token")
+Rel(securityConfig, jwtFilter,      "Registra filtro na cadeia HTTP")
+
+' ─── Controllers → Services ───────────────────────────────────────────────────
+Rel(saborController, saborService,  "Delega regras de negócio")
+Rel(loteController,  loteService,   "Delega regras de negócio")
+Rel(lojaController,  lojaService,   "Delega regras de negócio")
+Rel(distController,  distService,   "Delega regras de negócio")
+Rel(baixaController, baixaService,  "Delega regras de negócio")
+
+' ─── Services → Repositories ──────────────────────────────────────────────────
+Rel(saborService,   saborRepo,   "Lê e escreve", "JPA")
+Rel(loteService,    loteRepo,    "Lê e escreve", "JPA")
+Rel(lojaService,    lojaRepo,    "Lê e escreve", "JPA")
+Rel(distService,    distRepo,    "Lê e escreve", "JPA")
+Rel(distService,    loteRepo,    "Atualiza saldo do lote", "JPA")
+Rel(baixaService,   baixaRepo,   "Lê e escreve", "JPA")
+Rel(baixaService,   distRepo,    "Consulta total recebido pela loja", "JPA")
+Rel(usuarioService, usuarioRepo, "Lê e escreve", "JPA")
+
+' ─── Repositories → Banco ─────────────────────────────────────────────────────
+Rel(saborRepo,   db, "SQL", "JPA / Hibernate · TCP 3306")
+Rel(loteRepo,    db, "SQL", "JPA / Hibernate · TCP 3306")
+Rel(lojaRepo,    db, "SQL", "JPA / Hibernate · TCP 3306")
+Rel(distRepo,    db, "SQL", "JPA / Hibernate · TCP 3306")
+Rel(baixaRepo,   db, "SQL", "JPA / Hibernate · TCP 3306")
+Rel(usuarioRepo, db, "SQL", "JPA / Hibernate · TCP 3306")
+
+@enduml

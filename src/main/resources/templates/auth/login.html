@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Entrar — Aí 'Se Cream</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(160deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+            color: #333;
+        }
+        .login-card {
+            background: #fff;
+            border-radius: 12px;
+            padding: 36px 32px;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.25);
+        }
+        h1 {
+            font-size: 22px;
+            color: #1a1a2e;
+            text-align: center;
+            margin-bottom: 6px;
+        }
+        .subtitle {
+            text-align: center;
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 24px;
+        }
+        .form-group { margin-bottom: 16px; }
+        label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: #555;
+        }
+        input[type="email"], input[type="password"] {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+        input:focus {
+            outline: none;
+            border-color: #e8c84a;
+            box-shadow: 0 0 0 2px rgba(232, 200, 74, 0.25);
+        }
+        .btn-primary {
+            width: 100%;
+            padding: 11px;
+            border: none;
+            border-radius: 6px;
+            background: #1a1a2e;
+            color: #fff;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 8px;
+        }
+        .btn-primary:hover { background: #2a2a4e; }
+        .btn-primary:disabled { opacity: 0.65; cursor: not-allowed; }
+        .alert {
+            padding: 10px 12px;
+            border-radius: 6px;
+            margin-bottom: 16px;
+            font-size: 14px;
+            display: none;
+        }
+        .alert-danger {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .alert-info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+    </style>
+</head>
+<body>
+
+<div class="login-card">
+    <h1>🍦 Aí 'Se Cream</h1>
+    <p class="subtitle">Produção e distribuição — acesso ao sistema</p>
+
+    <div id="erro" class="alert alert-danger" role="alert"></div>
+    <div id="msgLogout" th:if="${param.logout != null}" class="alert alert-info" style="display:block;">
+        Você saiu com sucesso.
+    </div>
+
+    <form id="formLogin" novalidate>
+        <div class="form-group">
+            <label for="email">E-mail</label>
+            <input type="email" id="email" name="email" required autocomplete="username"
+                   placeholder="seu@email.com" />
+        </div>
+        <div class="form-group">
+            <label for="senha">Senha</label>
+            <input type="password" id="senha" name="senha" required autocomplete="current-password"
+                   placeholder="••••••••" />
+        </div>
+        <button type="submit" class="btn-primary" id="btnEntrar">Entrar</button>
+    </form>
+</div>
+
+<script>
+(function () {
+    const form = document.getElementById('formLogin');
+    const erro = document.getElementById('erro');
+    const btn = document.getElementById('btnEntrar');
+
+    function showErro(msg) {
+        var lo = document.getElementById('msgLogout');
+        if (lo) { lo.style.display = 'none'; }
+        erro.textContent = msg;
+        erro.style.display = 'block';
+    }
+
+    form.addEventListener('submit', async function (e) {
+        e.preventDefault();
+        erro.style.display = 'none';
+        const email = document.getElementById('email').value.trim();
+        const senha = document.getElementById('senha').value;
+        btn.disabled = true;
+        try {
+            const res = await fetch('/auth/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                credentials: 'include',
+                body: JSON.stringify({ email: email, senha: senha })
+            });
+            const data = await res.json().catch(function () { return {}; });
+            if (res.ok) {
+                window.location.href = '/';
+                return;
+            }
+            var msg = data.message;
+            if (!msg && data.detail) {
+                msg = typeof data.detail === 'string' ? data.detail : '';
+            }
+            showErro(msg || 'Não foi possível entrar. Verifique e-mail e senha.');
+        } catch (err) {
+            showErro('Erro de rede. Tente novamente.');
+        } finally {
+            btn.disabled = false;
+        }
+    });
+})();
+</script>
+</body>
+</html>
