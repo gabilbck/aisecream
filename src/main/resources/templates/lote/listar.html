@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lotes de produção - Aí 'Se Cream</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: Arial, sans-serif; background: #f5f5f5; color: #333; }
+        nav { background: #1a1a2e; padding: 14px 24px; display: flex; align-items: center; flex-wrap: wrap; gap: 16px 24px; }
+        nav .nav-spacer { flex: 1; min-width: 8px; }
+        nav .nav-logout { margin: 0; }
+        nav .btn-nav-logout {
+            background: transparent; color: #e8c84a; border: 1px solid #e8c84a;
+            padding: 6px 14px; border-radius: 5px; font-size: 13px; font-weight: 600;
+            cursor: pointer; font-family: inherit;
+        }
+        nav .btn-nav-logout:hover { background: rgba(232, 200, 74, 0.15); color: #fff; border-color: #fff; }
+        nav .brand { color: #e8c84a; font-size: 18px; font-weight: bold; text-decoration: none; }
+        nav a { color: #ccc; text-decoration: none; font-size: 14px; }
+        nav a:hover { color: #fff; }
+        .container { max-width: 1100px; margin: 32px auto; padding: 0 16px; }
+        .card { background: #fff; border-radius: 8px; padding: 24px; box-shadow: 0 1px 4px rgba(0,0,0,0.1); }
+        h1 { font-size: 22px; color: #1a1a2e; }
+        table { width: 100%; border-collapse: collapse; font-size: 14px; }
+        th { text-align: left; padding: 10px 12px; background: #f0f0f0; border-bottom: 2px solid #ddd; font-weight: 600; }
+        td { padding: 10px 12px; border-bottom: 1px solid #eee; vertical-align: top; }
+        tr:hover td { background: #fafafa; }
+        .btn { display: inline-block; padding: 8px 16px; border-radius: 5px; font-size: 13px; font-weight: 600; cursor: pointer; text-decoration: none; border: none; }
+        .btn-primary { background: #1a1a2e; color: #fff; }
+        .btn-primary:hover { background: #2a2a4e; }
+        .alert { padding: 12px 16px; border-radius: 6px; margin-bottom: 20px; font-size: 14px; }
+        .alert-success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .alert-danger { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .header-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 12px; }
+        .num { text-align: right; font-variant-numeric: tabular-nums; }
+    </style>
+</head>
+<body>
+
+<div th:replace="~{fragments/nav :: main}"></div>
+
+<div class="container">
+    <div class="card">
+
+        <div class="header-row">
+            <h1>Lotes de produção</h1>
+            <a th:href="@{/lotes/novo}" class="btn btn-primary">+ Novo lote</a>
+        </div>
+
+        <div th:if="${sucesso}" class="alert alert-success" th:text="${sucesso}"></div>
+        <div th:if="${erro}" class="alert alert-danger" th:text="${erro}"></div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Sabor</th>
+                    <th class="num">Produzida (lote inicial)</th>
+                    <th class="num">Disponível no CD</th>
+                    <th>Data produção</th>
+                    <th>Registrado por</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:if="${#lists.isEmpty(lotes)}">
+                    <td colspan="6" style="text-align:center; color:#999; padding: 24px;">
+                        Nenhum lote cadastrado ainda.
+                    </td>
+                </tr>
+                <tr th:each="l : ${lotes}">
+                    <td th:text="${l.id}"></td>
+                    <td th:text="${l.sabor.nome}"></td>
+                    <td class="num" th:text="${l.quantidadeProduzida}"></td>
+                    <td class="num" th:text="${l.quantidadeDisponivel}"></td>
+                    <td th:text="${#temporals.format(l.dataProducao, 'dd/MM/yyyy')}"></td>
+                    <td th:text="${l.criadoPor.nome}"></td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+</div>
+
+</body>
+</html>

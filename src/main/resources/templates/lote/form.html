@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Novo lote - Aí 'Se Cream</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: Arial, sans-serif; background: #f5f5f5; color: #333; }
+        nav { background: #1a1a2e; padding: 14px 24px; display: flex; align-items: center; flex-wrap: wrap; gap: 16px 24px; }
+        nav .nav-spacer { flex: 1; min-width: 8px; }
+        nav .nav-logout { margin: 0; }
+        nav .btn-nav-logout {
+            background: transparent; color: #e8c84a; border: 1px solid #e8c84a;
+            padding: 6px 14px; border-radius: 5px; font-size: 13px; font-weight: 600;
+            cursor: pointer; font-family: inherit;
+        }
+        nav .btn-nav-logout:hover { background: rgba(232, 200, 74, 0.15); color: #fff; border-color: #fff; }
+        nav .brand { color: #e8c84a; font-size: 18px; font-weight: bold; text-decoration: none; }
+        nav a { color: #ccc; text-decoration: none; font-size: 14px; }
+        nav a:hover { color: #fff; }
+        .container { max-width: 600px; margin: 32px auto; padding: 0 16px; }
+        .card { background: #fff; border-radius: 8px; padding: 24px; box-shadow: 0 1px 4px rgba(0,0,0,0.1); }
+        h1 { font-size: 22px; color: #1a1a2e; margin-bottom: 24px; }
+        .form-group { margin-bottom: 16px; }
+        label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; color: #555; }
+        input[type="text"], input[type="number"], input[type="date"], select {
+            width: 100%; padding: 9px 12px; border: 1px solid #ccc;
+            border-radius: 5px; font-size: 14px; font-family: Arial, sans-serif;
+        }
+        input:focus, select:focus { outline: none; border-color: #1a1a2e; }
+        .error { color: #e74c3c; font-size: 12px; margin-top: 4px; }
+        .hint { font-size: 12px; color: #777; margin-top: 6px; }
+        .btn { display: inline-block; padding: 9px 20px; border-radius: 5px; font-size: 14px; font-weight: 600; cursor: pointer; text-decoration: none; border: none; }
+        .btn-primary { background: #1a1a2e; color: #fff; }
+        .btn-primary:hover { background: #2a2a4e; }
+        .btn-secondary { background: #aaa; color: #fff; }
+        .btn-secondary:hover { background: #888; }
+        .form-actions { display: flex; gap: 10px; margin-top: 24px; }
+    </style>
+</head>
+<body>
+
+<div th:replace="~{fragments/nav :: main}"></div>
+
+<div class="container">
+    <div class="card">
+
+        <h1>Novo lote de produção</h1>
+
+        <div th:if="${#lists.isEmpty(sabores)}" class="hint" style="color:#c0392b; margin-bottom:16px;">
+            Não há sabores ativos. Cadastre ou reative um sabor antes de registrar um lote.
+        </div>
+
+        <form th:action="@{/lotes/novo}"
+              th:object="${loteForm}"
+              method="post">
+
+            <div class="form-group">
+                <label for="saborId">Sabor *</label>
+                <select id="saborId" th:field="*{saborId}" th:disabled="${#lists.isEmpty(sabores)}">
+                    <option value="">Selecione…</option>
+                    <option th:each="s : ${sabores}" th:value="${s.id}" th:text="${s.nome}"></option>
+                </select>
+                <span class="error" th:if="${#fields.hasErrors('saborId')}" th:errors="*{saborId}"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="quantidadeProduzida">Quantidade produzida *</label>
+                <input type="number" id="quantidadeProduzida" th:field="*{quantidadeProduzida}" min="1" step="1" />
+                <span class="error" th:if="${#fields.hasErrors('quantidadeProduzida')}" th:errors="*{quantidadeProduzida}"></span>
+                <p class="hint">O estoque disponível para distribuição inicia igual à quantidade produzida.</p>
+            </div>
+
+            <div class="form-group">
+                <label for="dataProducao">Data de produção *</label>
+                <input type="date" id="dataProducao" th:field="*{dataProducao}" />
+                <span class="error" th:if="${#fields.hasErrors('dataProducao')}" th:errors="*{dataProducao}"></span>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary" th:disabled="${#lists.isEmpty(sabores)}">Salvar</button>
+                <a th:href="@{/lotes}" class="btn btn-secondary">Cancelar</a>
+            </div>
+        </form>
+
+    </div>
+</div>
+
+</body>
+</html>
