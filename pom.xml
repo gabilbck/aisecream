@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.aisecrean</groupId>
-	<artifactId>aisecrean</artifactId>
+	<artifactId>aisecream</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>aisecrean</name>
 	<description>Sistema para controle e distribuição da produção de sorvetes da empresa</description>

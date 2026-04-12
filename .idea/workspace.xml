@@ -4,7 +4,37 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3b7c2b9a-5cbd-466b-97cf-d2a111afbbb1" name="Changes" comment="adicionado nivel 3 no modelo de arquitetura c4,&#10;adicionada cadastros basicos, sabor, usuarios, lojas" />
+    <list default="true" id="3b7c2b9a-5cbd-466b-97cf-d2a111afbbb1" name="Changes" comment="adicionado nivel 3 no modelo de arquitetura c4,&#10;adicionada cadastros basicos, sabor, usuarios, lojas">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/aisecream/controller/LoteController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/aisecream/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/aisecream/config/SecurityConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/aisecream/controller/AcessoNegadoController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/aisecream/controller/AcessoNegadoController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/aisecream/controller/AuthController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/aisecream/controller/AuthController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/aisecream/controller/LoginController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/aisecream/controller/LoginController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/aisecream/controller/LojaController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/aisecream/controller/LojaController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/aisecream/controller/UsuarioController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/aisecream/controller/UsuarioController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/aisecream/dto/LoginRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/aisecream/dto/LoginRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/aisecream/dto/LoginResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/aisecream/dto/LoginResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/aisecream/dto/UsuarioOperadorForm.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/aisecream/dto/UsuarioOperadorForm.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/aisecream/exception/ApiExceptionHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/aisecream/exception/ApiExceptionHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/aisecream/model/Distribuicao.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/aisecream/model/Distribuicao.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/aisecream/repository/LojaRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/aisecream/repository/LojaRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/aisecream/repository/UsuarioRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/aisecream/repository/UsuarioRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/aisecream/security/JwtAuthFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/aisecream/security/JwtAuthFilter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/aisecream/security/JwtService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/aisecream/security/JwtService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/aisecream/service/LojaService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/aisecream/service/LojaService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/aisecream/service/UsuarioService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/aisecream/service/UsuarioService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/db/migration/V2__seed_usuario_admin.sql" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/db/migration/V2__seed_usuario_admin.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/acesso-negado.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/acesso-negado.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/auth/login.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/auth/login.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/fragments/nav.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/fragments/nav.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/loja/form.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/loja/form.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/loja/listar.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/loja/listar.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/usuario/form.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/usuario/form.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/usuario/listar.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/usuario/listar.html" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -86,19 +116,33 @@
       <recent name="C:\Users\gab\Desktop\bararara\aisecream\src\main\resources\templates\sabor" />
       <recent name="C:\Users\gab\Desktop\bararara\aisecream\src\main\java\com\aisecrean\model" />
     </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.aisecream.controller" />
+    </key>
   </component>
   <component name="RunManager" selected="Spring Boot.AisecreanApplication">
     <configuration name="All in aisecrean" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="aisecrean" />
+      <module name="aisecream" />
       <option name="PACKAGE_NAME" value="" />
       <option name="TEST_OBJECT" value="package" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration default="true" type="JetRunConfigurationType">
+      <module name="aisecream" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
+      <module name="aisecream" />
+      <option name="filePath" />
+      <method v="2" />
+    </configuration>
     <configuration name="AisecreamApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
       <option name="FRAME_DEACTIVATION_UPDATE_POLICY" value="UpdateClassesAndResources" />
-      <module name="aisecrean" />
+      <module name="aisecream" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="com.aisecream.AisecreamApplication" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -106,7 +150,7 @@
     </configuration>
     <configuration name="AisecreanApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
       <option name="FRAME_DEACTIVATION_UPDATE_POLICY" value="UpdateClassesAndResources" />
-      <module name="aisecrean" />
+      <module name="aisecream" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="com.aisecrean.AisecreanApplication" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -149,7 +193,9 @@
       <workItem from="1773629513392" duration="529000" />
       <workItem from="1773697967972" duration="4089000" />
       <workItem from="1774832057127" duration="694000" />
-      <workItem from="1774832917416" duration="3808000" />
+      <workItem from="1774832917416" duration="4546000" />
+      <workItem from="1774906226395" duration="5897000" />
+      <workItem from="1776005294913" duration="3300000" />
     </task>
     <task id="LOCAL-00001" summary="adicionado nivel 3 no modelo de arquitetura c4,&#10;adicionada cadastros basicos, sabor, usuarios, lojas">
       <option name="closed" value="true" />

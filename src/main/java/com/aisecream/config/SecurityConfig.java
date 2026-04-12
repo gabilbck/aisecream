@@ -29,6 +29,7 @@ public class SecurityConfig {
                         .requestMatchers("/login", "/auth/login", "/error", "/acesso-negado").permitAll()
                         .requestMatchers("/usuarios/**").hasRole("ADMIN")
                         .requestMatchers("/lojas/**").hasRole("ADMIN")
+                        .requestMatchers("/distribuicoes/**").hasRole("ADMIN")
                         .requestMatchers("/sabores/novo", "/sabores/editar/**").hasRole("ADMIN")
                         .requestMatchers("/sabores/inativar/**").hasRole("ADMIN")
                         .anyRequest().authenticated())

@@ -36,6 +36,13 @@ public class Distribuicao {
     private Integer quantidade;
 
     @NotNull
+    @Column(name = "quantidade_lote_inicial", nullable = false)
+    private Integer quantidadeLoteInicial;
+
+    @Column(name = "saldo_disponivel_cd_apos")
+    private Integer saldoDisponivelCdApos;
+
+    @NotNull
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private StatusDistribuicao status = StatusDistribuicao.ATIVA;

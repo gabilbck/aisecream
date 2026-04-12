@@ -20,6 +20,10 @@ public class LojaService {
         return lojaRepository.findAllByOrderByNomeAsc();
     }
 
+    public List<Loja> listarAtivas() {
+        return lojaRepository.findByAtivoTrueOrderByNomeAsc();
+    }
+
     public Loja buscarPorId(Integer id) {
         return lojaRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Loja não encontrada: " + id));

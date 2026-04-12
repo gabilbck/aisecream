@@ -10,4 +10,6 @@ import java.util.List;
 public interface LojaRepository extends JpaRepository<Loja, Integer> {
 
     List<Loja> findAllByOrderByNomeAsc();
+
+    List<Loja> findByAtivoTrueOrderByNomeAsc();
 }
