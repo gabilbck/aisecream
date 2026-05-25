@@ -96,8 +96,6 @@ Legenda de status na implementação atual:
 
 | ID | Descrição | Categoria | Status |
 |----|-----------|-----------|--------|
-| RNF-01 | Respostas de listagem em até 1s para até 10.000 registros | Performance | ❌ Meta — não medido no projeto |
-| RNF-02 | Operações de escrita concluídas em até 500ms | Performance | ❌ Meta — não medido no projeto |
 | RNF-03 | Senhas armazenadas com hash BCrypt (fator mínimo 10) | Segurança | ✅ |
 | RNF-04 | Tokens JWT com expiração configurável (padrão 8h) | Segurança | ✅ `jwt.expiration-ms` |
 | RNF-05 | Endpoints protegidos por autorização baseada em roles (RBAC) | Segurança | ✅ |
