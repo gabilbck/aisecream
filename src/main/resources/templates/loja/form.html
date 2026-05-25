@@ -19,16 +19,20 @@
         nav .brand { color: #e8c84a; font-size: 18px; font-weight: bold; text-decoration: none; }
         nav a { color: #ccc; text-decoration: none; font-size: 14px; }
         nav a:hover { color: #fff; }
-        .container { max-width: 600px; margin: 32px auto; padding: 0 16px; }
+        .container { max-width: 720px; margin: 32px auto; padding: 0 16px; }
         .card { background: #fff; border-radius: 8px; padding: 24px; box-shadow: 0 1px 4px rgba(0,0,0,0.1); }
         h1 { font-size: 22px; color: #1a1a2e; margin-bottom: 24px; }
+        h2 { font-size: 15px; color: #1a1a2e; margin: 8px 0 16px; padding-bottom: 8px; border-bottom: 1px solid #eee; }
         .form-group { margin-bottom: 16px; }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+        @media (max-width: 560px) { .form-row { grid-template-columns: 1fr; } }
         label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; color: #555; }
-        input[type="text"], textarea, select {
+        input[type="text"], select {
             width: 100%; padding: 9px 12px; border: 1px solid #ccc;
             border-radius: 5px; font-size: 14px; font-family: Arial, sans-serif;
         }
-        input:focus, textarea:focus, select:focus { outline: none; border-color: #1a1a2e; }
+        input:focus, select:focus { outline: none; border-color: #1a1a2e; }
+        .hint { font-size: 12px; color: #888; margin-top: 4px; }
         .error { color: #e74c3c; font-size: 12px; margin-top: 4px; }
         .btn { display: inline-block; padding: 9px 20px; border-radius: 5px; font-size: 14px; font-weight: 600; cursor: pointer; text-decoration: none; border: none; }
         .btn-primary { background: #1a1a2e; color: #fff; }
@@ -47,10 +51,10 @@
 
         <h1 th:text="${loja.id != null ? 'Editar loja' : 'Nova loja'}"></h1>
 
-        <form th:if="${loja.id == null}"
-              th:action="@{/lojas/novo}"
+        <form th:action="${loja.id != null} ? @{/lojas/editar/{id}(id=${loja.id})} : @{/lojas/novo}"
               th:object="${loja}"
-              method="post">
+              method="post"
+              id="formLoja">
 
             <div class="form-group">
                 <label for="nome">Nome *</label>
@@ -58,10 +62,51 @@
                 <span class="error" th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}"></span>
             </div>
 
+            <h2>Endereço</h2>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="cep">CEP *</label>
+                    <input type="text" id="cep" th:field="*{cep}" placeholder="00000-000" maxlength="9" inputmode="numeric" />
+                    <span class="hint">Ao sair do campo, buscamos logradouro, cidade e UF.</span>
+                    <span class="error" th:if="${#fields.hasErrors('cep')}" th:errors="*{cep}"></span>
+                </div>
+                <div class="form-group">
+                    <label for="estado">Estado (UF) *</label>
+                    <select id="estado" th:field="*{estado}" required>
+                        <option value="" disabled hidden>UF</option>
+                        <option th:each="uf : ${#strings.listSplit('AC,AL,AP,AM,BA,CE,DF,ES,GO,MA,MT,MS,MG,PA,PB,PR,PE,PI,RJ,RN,RS,RO,RR,SC,SP,SE,TO', ',')}"
+                                th:value="${uf}" th:text="${uf}"></option>
+                    </select>
+                    <span class="error" th:if="${#fields.hasErrors('estado')}" th:errors="*{estado}"></span>
+                </div>
+            </div>
+
             <div class="form-group">
-                <label for="endereco">Endereço *</label>
-                <textarea id="endereco" th:field="*{endereco}" rows="3" placeholder="Rua, número, bairro, cidade" maxlength="255"></textarea>
-                <span class="error" th:if="${#fields.hasErrors('endereco')}" th:errors="*{endereco}"></span>
+                <label for="cidade">Cidade *</label>
+                <input type="text" id="cidade" th:field="*{cidade}" maxlength="100" />
+                <span class="error" th:if="${#fields.hasErrors('cidade')}" th:errors="*{cidade}"></span>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group" style="grid-column: 1 / -1;">
+                    <label for="logradouro">Logradouro *</label>
+                    <input type="text" id="logradouro" th:field="*{logradouro}" placeholder="Rua, avenida, etc." maxlength="150" />
+                    <span class="error" th:if="${#fields.hasErrors('logradouro')}" th:errors="*{logradouro}"></span>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="numero">Número *</label>
+                    <input type="text" id="numero" th:field="*{numero}" placeholder="Ex: 123 ou S/N" maxlength="20" />
+                    <span class="error" th:if="${#fields.hasErrors('numero')}" th:errors="*{numero}"></span>
+                </div>
+                <div class="form-group">
+                    <label for="complemento">Complemento</label>
+                    <input type="text" id="complemento" th:field="*{complemento}" placeholder="Apto, bloco, sala…" maxlength="100" />
+                    <span class="error" th:if="${#fields.hasErrors('complemento')}" th:errors="*{complemento}"></span>
+                </div>
             </div>
 
             <div class="form-group">
@@ -70,36 +115,7 @@
                 <span class="error" th:if="${#fields.hasErrors('telefone')}" th:errors="*{telefone}"></span>
             </div>
 
-            <div class="form-actions">
-                <button type="submit" class="btn btn-primary">Salvar</button>
-                <a th:href="@{/lojas}" class="btn btn-secondary">Cancelar</a>
-            </div>
-        </form>
-
-        <form th:if="${loja.id != null}"
-              th:action="@{/lojas/editar/{id}(id=${loja.id})}"
-              th:object="${loja}"
-              method="post">
-
-            <div class="form-group">
-                <label for="nomeEdit">Nome *</label>
-                <input type="text" id="nomeEdit" th:field="*{nome}" maxlength="100" />
-                <span class="error" th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}"></span>
-            </div>
-
-            <div class="form-group">
-                <label for="enderecoEdit">Endereço *</label>
-                <textarea id="enderecoEdit" th:field="*{endereco}" rows="3" maxlength="255"></textarea>
-                <span class="error" th:if="${#fields.hasErrors('endereco')}" th:errors="*{endereco}"></span>
-            </div>
-
-            <div class="form-group">
-                <label for="telefoneEdit">Telefone</label>
-                <input type="text" id="telefoneEdit" th:field="*{telefone}" maxlength="20" />
-                <span class="error" th:if="${#fields.hasErrors('telefone')}" th:errors="*{telefone}"></span>
-            </div>
-
-            <div class="form-group">
+            <div class="form-group" th:if="${loja.id != null}">
                 <label for="ativo">Status</label>
                 <select id="ativo" th:field="*{ativo}">
                     <option th:value="true">Ativa</option>
@@ -115,6 +131,46 @@
 
     </div>
 </div>
+
+<script th:inline="javascript">
+(function () {
+    const cepInput = document.getElementById('cep');
+    if (!cepInput) return;
+
+    cepInput.addEventListener('input', function () {
+        let v = this.value.replace(/\D/g, '').slice(0, 8);
+        if (v.length > 5) {
+            this.value = v.slice(0, 5) + '-' + v.slice(5);
+        } else {
+            this.value = v;
+        }
+    });
+
+    cepInput.addEventListener('blur', function () {
+        const digits = this.value.replace(/\D/g, '');
+        if (digits.length !== 8) return;
+
+        fetch('https://viacep.com.br/ws/' + digits + '/json/')
+            .then(function (r) { return r.json(); })
+            .then(function (data) {
+                if (data.erro) return;
+                const logradouro = document.getElementById('logradouro');
+                const cidade = document.getElementById('cidade');
+                const estado = document.getElementById('estado');
+                if (data.logradouro && logradouro && !logradouro.value) {
+                    logradouro.value = data.logradouro;
+                }
+                if (data.localidade && cidade && !cidade.value) {
+                    cidade.value = data.localidade;
+                }
+                if (data.uf && estado) {
+                    estado.value = data.uf;
+                }
+            })
+            .catch(function () { /* rede ou CEP inválido — preenchimento manual */ });
+    });
+})();
+</script>
 
 </body>
 </html>

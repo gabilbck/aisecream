@@ -1,183 +1,185 @@
-
 # Aí 'Se Cream
 
-Sistema web monolítico para gerenciamento de produção e distribuição de sorvetes de uma fábrica central para as lojas da rede.
- 
----
+Sistema web monolítico para controle de produção, estoque no centro de distribuição (CD), distribuição para lojas e baixas de estoque nas lojas da rede de sorveterias.
 
-## Descrição do Projeto
-
-Uma rede de sorveterias possui uma fábrica central responsável pela produção dos sabores. Após a produção, os lotes precisam ser distribuídos entre as lojas da rede. O sistema permite registrar lotes de produção, distribuir quantidades para lojas cadastradas e manter rastreabilidade de todas as movimentações.
- 
----
-
-## Escopo do Sistema
-
-O sistema cobre o ciclo de **produção → distribuição → controle de estoque das lojas** por baixa manual.
-
-O sistema **não** gerencia vendas, clientes, preços ou pagamentos. O controle de estoque das lojas é feito por baixa manual: o operador registra as quantidades consumidas pela loja, e o sistema calcula o saldo atual com base no total recebido via distribuição menos as baixas informadas.
- 
----
-
-## Domínio do Problema
-
-Atualmente a rede não possui controle estruturado para:
-
-- Registrar as quantidades produzidas por lote e sabor
-- Controlar a quantidade disponível em cada lote após distribuições parciais
-- Registrar e auditar as distribuições realizadas
-- Garantir que não sejam distribuídas quantidades superiores às disponíveis
-- Acompanhar o estoque atual de cada loja
-- Diferenciar permissões entre administradores e operadores de produção
+A interface é **server-side** (Spring MVC + Thymeleaf). A API REST exposta hoje é essencialmente o endpoint de login (`POST /auth/login`); o restante do fluxo ocorre por páginas HTML autenticadas com JWT em cookie HTTP-only.
 
 ---
 
-## Requisitos Funcionais
+## O que o sistema faz (implementado)
 
-### Sabores
+| Módulo | Rota principal | Descrição |
+|--------|----------------|-----------|
+| **Estoque atual** | `/` ou `/estoque` | Tela inicial: resumo de unidades no CD e nas lojas, lotes com saldo no CD e saldo por loja (distribuições ativas − baixas). |
+| **Sabores** | `/sabores` | Listagem para todos os usuários autenticados. Cadastro, edição e inativação apenas para **ADMIN**. |
+| **Lotes de produção** | `/lotes` | Listagem de todos os lotes e cadastro de novo lote (sabor ativo, quantidade, data). O saldo no CD é `quantidade_disponivel`, decrementado nas distribuições e reintegrado no cancelamento. |
+| **Lojas** | `/lojas` | CRUD e inativação (**ADMIN**). Endereço estruturado: CEP, UF, cidade, logradouro, número e complemento (busca de CEP via ViaCEP no formulário). |
+| **Distribuições** | `/distribuicoes` | Registrar distribuição lote → loja, listar histórico e cancelar (estorna saldo ao lote). Apenas **ADMIN**. Valida quantidade contra o disponível no CD. |
+| **Baixas de estoque** | `/baixas` | Registrar consumo na loja (loja → lote com saldo → quantidade). Listagem com filtro opcional por loja. Impede baixa maior que o saldo na loja. |
+| **Operadores** | `/usuarios` | Cadastro e edição de usuários com perfil OPERADOR (**ADMIN**). |
+| **Autenticação** | `/login`, `/auth/login` | Login por e-mail e senha; JWT em cookie + resposta JSON no login AJAX. Logout em `/logout`. |
 
-| ID | Descrição |
-|----|-----------|
-| RF-01 | Cadastrar sabores com nome, descrição e status ativo/inativo |
-| RF-02 | Listar, editar e inativar sabores cadastrados |
+### O que o sistema **não** cobre
 
-### Lotes de Produção
+- Vendas, clientes, preços ou pagamentos
+- Filtros avançados (por período, sabor, status) em lotes, distribuições ou baixas — hoje há listagem completa ou filtro simples de baixa por loja
+- API REST completa para os demais recursos (apenas login em JSON)
 
-| ID | Descrição |
-|----|-----------|
-| RF-03 | Registrar lote de produção informando sabor, quantidade e data |
-| RF-04 | Exibir quantidade disponível de cada lote em tempo real |
-| RF-05 | Listar lotes com filtros por sabor, status e período |
-
-### Lojas
-
-| ID | Descrição |
-|----|-----------|
-| RF-06 | Cadastrar lojas com nome, endereço e status ativo |
-| RF-07 | Listar e editar lojas cadastradas |
-
-### Distribuição
-
-| ID | Descrição |
-|----|-----------|
-| RF-08 | Registrar distribuição associando lote, loja e quantidade |
-| RF-09 | Impedir distribuição quando a quantidade exceder o saldo do lote |
-| RF-10 | Listar histórico de distribuições com filtros por loja, lote e período |
-| RF-11 | Cancelar distribuição e estornar saldo ao lote de origem |
-
-### Estoque das Lojas
-
-| ID | Descrição |
-|----|-----------|
-| RF-15 | Registrar baixa manual de estoque informando loja, lote e quantidade consumida |
-| RF-16 | Exibir saldo atual da loja por sabor (total recebido − total de baixas) |
-| RF-17 | Listar histórico de baixas por loja e período |
-
-### Controle de Acesso
-
-| ID | Descrição |
-|----|-----------|
-| RF-12 | Autenticar usuários com e-mail e senha, retornando token JWT |
-| RF-13 | Perfil ADMIN: acesso total ao sistema |
-| RF-14 | Perfil OPERADOR: registro de lotes, baixas e consultas |
- 
 ---
 
-## Requisitos Não Funcionais
+## Perfis de acesso
 
-| ID | Descrição | Categoria |
-|----|-----------|-----------|
-| RNF-01 | Respostas de listagem em até 1s para até 10.000 registros | Performance |
-| RNF-02 | Operações de escrita concluídas em até 500ms | Performance |
-| RNF-03 | Senhas armazenadas com hash BCrypt (fator mínimo 10) | Segurança |
-| RNF-04 | Tokens JWT com expiração configurável (padrão 8h) | Segurança |
-| RNF-05 | Endpoints protegidos por autorização baseada em roles (RBAC) | Segurança |
-| RNF-06 | Operações de distribuição e baixa atômicas (transação única no banco) | Confiabilidade |
-| RNF-07 | Erros de validação com mensagens descritivas no corpo da resposta | Usabilidade |
-| RNF-08 | Código organizado em camadas: Controller → Service → Repository | Manutenibilidade |
-| RNF-09 | Migrações de banco gerenciadas por Flyway | Manutenibilidade |
- 
+| Perfil | Permissões principais |
+|--------|----------------------|
+| **ADMIN** | Sabores (CRUD), lojas, distribuições, operadores; demais telas |
+| **OPERADOR** | Estoque atual, listagem de sabores, lotes (criar/listar), baixas; **sem** lojas, distribuições nem cadastro de sabores |
+
+Rotas sensíveis são protegidas em `SecurityConfig` e, no caso de distribuições, com `@PreAuthorize("hasRole('ADMIN')")`.
+
 ---
 
-## Tecnologias
+## Regras de negócio em uso
 
-### Java 21
+- **CD:** cada lote inicia com `quantidade_disponivel = quantidade_produzida`; distribuições ativas reduzem esse valor; cancelamento de distribuição devolve a quantidade ao lote.
+- **Loja:** saldo = soma das distribuições **ATIVAS** para aquele lote/loja − soma das baixas registradas.
+- **Distribuição cancelada** não entra no saldo da loja nem consome estoque do CD (após estorno).
+- Sabores e lojas **inativos** não entram em novos lotes/distribuições/baixas conforme validação nos services.
 
-Versão LTS com suporte garantido até 2031. Traz virtual threads (Project Loom), melhorando throughput em operações de I/O. Ecossistema maduro, tipagem forte e ampla base de profissionais.
+---
 
-### Spring Boot 3.x
+## Stack tecnológica
 
-Framework principal da aplicação. Oferece configuração automática, servidor Tomcat embutido e integração nativa com Spring Data JPA, Spring Security e Bean Validation. Reduz boilerplate e acelera o desenvolvimento de APIs REST — ideal para um monolito bem estruturado em camadas.
+| Tecnologia | Uso no projeto |
+|------------|----------------|
+| **Java 21** | Linguagem e runtime |
+| **Spring Boot 4.0.3** | Aplicação monolítica, Tomcat embutido |
+| **Spring MVC + Thymeleaf** | Páginas HTML e formulários |
+| **Spring Data JPA (Hibernate 7)** | Persistência |
+| **Spring Security + JWT (jjwt)** | Autenticação; cookie `access_token` + filtro `JwtAuthFilter` |
+| **BCrypt (fator 10)** | Hash de senhas |
+| **Bean Validation** | DTOs, entidades e formulários (`@Valid`) |
+| **MariaDB** | Banco relacional (`aisecream`) |
+| **Flyway** | Migrações em `src/main/resources/db/migration` |
+| **Maven Wrapper** | Build e execução via `mvnw` / `mvnw.cmd` |
+| **Lombok** | Entidades e DTOs |
+| **Spring Boot DevTools** | Recarregamento em desenvolvimento |
 
-### MariaDB
-
-Banco de dados relacional open-source, compatível com MySQL e com suporte completo a transações ACID. Adequado para o modelo relacional do domínio (lotes, lojas, distribuições). Menor custo operacional e fácil de hospedar em diferentes ambientes.
-
-### Spring Data JPA (Hibernate)
-
-Abstração sobre Hibernate que elimina SQL repetitivo via `JpaRepository`. Suporte a queries derivadas, JPQL e à anotação `@Transactional` — essencial para garantir atomicidade nas operações de distribuição e baixa de estoque.
-
-### Spring Security + JWT
-
-Autenticação stateless via tokens JWT, sem necessidade de manter sessão no servidor. Spring Security simplifica a configuração de controle de acesso por roles (ADMIN / OPERADOR) com filtros e anotações como `@PreAuthorize`.
-
-### Flyway
-
-Gerenciamento de versionamento do schema do banco de dados por scripts SQL numerados. Garante que todos os ambientes (desenvolvimento, homologação, produção) estejam sempre com a mesma estrutura de banco.
-
-### Maven Wrapper (mvnw)
-
-O projeto utiliza o Maven Wrapper (`mvnw`), que baixa e executa o Maven automaticamente sem necessidade de instalação manual. Basta usar `.\mvnw` no Windows (ou `./mvnw` no Linux/Mac) no lugar do comando `mvn`.
-
-### Bean Validation (Jakarta Validation 3)
-
-Anotações como `@NotNull`, `@Min` e `@Positive` nos DTOs garantem validação declarativa sem lógica manual nos services. Integrado nativamente com Spring MVC via `@Valid`.
- 
 ---
 
 ## Arquitetura
 
-O sistema segue arquitetura monolítica com separação em camadas:
+Monolito em camadas:
 
 ```
-Controller (REST)
+Browser (Thymeleaf)
     ↓
-Service (regras de negócio + @Transactional)
+Controller (@Controller / @RestController)
     ↓
-Repository (Spring Data JPA)
+Service (@Transactional, regras de negócio)
     ↓
-MariaDB
+Repository (JpaRepository)
+    ↓
+MariaDB (schema Flyway)
 ```
 
-A camada de segurança atua transversalmente, interceptando requisições antes de chegarem aos controllers via filtros do Spring Security.
- 
+Diagramas C4 (referência) em `src/architecture/` (`c4-nivel2-containers.puml`, `c4-nivel3-components.puml`).
+
 ---
 
-## Como Rodar o Projeto
+## Banco de dados
+
+Schema versionado pelo Flyway:
+
+| Versão | Conteúdo |
+|--------|----------|
+| V1 | Tabelas: `usuario`, `sabor`, `loja`, `lote_producao`, `distribuicao`, `baixa_estoque` |
+| V2 | Usuário admin inicial (desenvolvimento) |
+| V3 | Campos históricos em `distribuicao` (`quantidade_lote_inicial`, `saldo_disponivel_cd_apos`) |
+| V4 | Endereço estruturado em `loja` (remove coluna única `endereco`) |
+
+`spring.jpa.hibernate.ddl-auto=validate` — o Hibernate não altera o schema; apenas o Flyway.
+
+---
+
+## Como rodar
 
 ### Pré-requisitos
 
-- Java 21 instalado
-- MariaDB rodando localmente
-- IntelliJ IDEA (recomendado)
+- **Java 21**
+- **MariaDB** em execução (ex.: porta 3306)
+- Banco `aisecream` criado (ou deixe o Flyway criar/usar conforme sua instalação)
 
-### Passos
+### Configuração
 
-1. Clone o repositório
-2. Configure o banco no `src/main/resources/application.properties`:
-   ```
-   spring.datasource.url=jdbc:mariadb://localhost:3306/aisecrean
-   spring.datasource.username=seu_usuario
-   spring.datasource.password=sua_senha
-   ```
-3. Baixe as dependências:
-   ```
-   .\mvnw dependency:resolve -U
-   ```
-4. Rode a aplicação:
-   ```
-   .\mvnw spring-boot:run
-   ```
- 
+Edite `src/main/resources/application.properties`:
 
+```properties
+spring.datasource.url=jdbc:mariadb://localhost:3306/aisecream
+spring.datasource.username=root
+spring.datasource.password=
+```
 
+JWT (desenvolvimento):
+
+```properties
+jwt.secret=aisecream-dev-secret-key-mudar-em-producao-32bytes-min!!
+jwt.expiration-ms=28800000
+```
+
+### Execução
+
+```bash
+# Windows
+.\mvnw.cmd spring-boot:run
+
+# Linux / macOS
+./mvnw spring-boot:run
+```
+
+Aplicação em **http://localhost:8080** (porta padrão).
+
+### Usuário inicial (após migrações)
+
+| Campo | Valor |
+|-------|--------|
+| E-mail | `admin@aisecream.com` |
+| Senha | `admin123` |
+
+Altere em produção.
+
+### Flyway (manutenção)
+
+Se uma migração falhar no histórico:
+
+```bash
+.\mvnw.cmd flyway:repair
+```
+
+---
+
+## Estrutura do código (resumo)
+
+```
+src/main/java/com/aisecream/
+├── config/          # SecurityConfig
+├── controller/      # MVC + AuthController (REST login)
+├── dto/             # Formulários e views (ex.: EstoqueAtualView)
+├── exception/       # ApiExceptionHandler (REST)
+├── model/           # Entidades JPA e enums
+├── repository/      # Spring Data JPA
+├── security/        # JWT filter e serviço
+└── service/         # Regras de negócio
+
+src/main/resources/
+├── application.properties
+├── db/migration/    # Scripts Flyway
+└── templates/       # Thymeleaf (estoque, sabor, lote, loja, …)
+```
+
+Testes: apenas `AisecreanApplicationTests` (carga de contexto Spring Boot).
+
+---
+
+## Portas e conflitos
+
+Se aparecer *Port 8080 was already in use*, encerre o processo anterior ou defina `server.port=8081` em `application.properties`.

@@ -41,7 +41,12 @@ CREATE TABLE sabor (
 CREATE TABLE loja (
     id          INT          NOT NULL AUTO_INCREMENT,
     nome        VARCHAR(100)    NOT NULL,
-    endereco    VARCHAR(255)    NOT NULL,
+    cep         VARCHAR(9)      NOT NULL,
+    estado      CHAR(2)         NOT NULL,
+    cidade      VARCHAR(100)    NOT NULL,
+    logradouro  VARCHAR(150)    NOT NULL,
+    numero      VARCHAR(20)     NOT NULL,
+    complemento VARCHAR(100),
     telefone    VARCHAR(20),
     ativo       BOOLEAN         NOT NULL DEFAULT TRUE,
     criado_em   DATETIME        NOT NULL DEFAULT CURRENT_TIMESTAMP,

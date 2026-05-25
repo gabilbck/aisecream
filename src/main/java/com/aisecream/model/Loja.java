@@ -2,6 +2,7 @@ package com.aisecream.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,9 +27,33 @@ public class Loja {
     private String nome;
 
     @NotBlank
-    @Column(nullable = false, length = 255)
-    @Size(max = 255)
-    private String endereco;
+    @Pattern(regexp = "^\\d{5}-?\\d{3}$", message = "CEP inválido. Use o formato 00000-000.")
+    @Column(nullable = false, length = 9)
+    private String cep;
+
+    @NotBlank
+    @Pattern(regexp = "^[A-Za-z]{2}$", message = "Informe a UF com 2 letras.")
+    @Column(nullable = false, length = 2)
+    private String estado;
+
+    @NotBlank
+    @Size(max = 100)
+    @Column(nullable = false, length = 100)
+    private String cidade;
+
+    @NotBlank
+    @Size(max = 150)
+    @Column(nullable = false, length = 150)
+    private String logradouro;
+
+    @NotBlank
+    @Size(max = 20)
+    @Column(nullable = false, length = 20)
+    private String numero;
+
+    @Size(max = 100)
+    @Column(length = 100)
+    private String complemento;
 
     @Size(max = 20, message = "Telefone deve ter no máximo 20 caracteres.")
     @Column(length = 20)
@@ -42,5 +67,16 @@ public class Loja {
 
     public boolean isAtivo() {
         return Boolean.TRUE.equals(this.ativo);
+    }
+
+    public String getEnderecoFormatado() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(logradouro).append(", ").append(numero);
+        if (complemento != null && !complemento.isBlank()) {
+            sb.append(" - ").append(complemento);
+        }
+        sb.append(" — ").append(cidade).append("/").append(estado);
+        sb.append(" — CEP ").append(cep);
+        return sb.toString();
     }
 }

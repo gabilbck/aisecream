@@ -137,6 +137,16 @@
 				</configuration>
 			</plugin>
 			<plugin>
+				<groupId>org.flywaydb</groupId>
+				<artifactId>flyway-maven-plugin</artifactId>
+				<configuration>
+					<url>jdbc:mariadb://localhost:3306/aisecream</url>
+					<user>root</user>
+					<password></password>
+					<locations>classpath:db/migration</locations>
+				</configuration>
+			</plugin>
+			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>

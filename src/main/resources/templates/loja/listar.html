@@ -76,7 +76,7 @@
                 <tr th:each="loja : ${lojas}">
                     <td th:text="${loja.id}"></td>
                     <td th:text="${loja.nome}"></td>
-                    <td class="col-endereco" th:text="${loja.endereco}"></td>
+                    <td class="col-endereco" th:text="${loja.enderecoFormatado}"></td>
                     <td th:text="${loja.telefone != null ? loja.telefone : '—'}"></td>
                     <td>
                         <span th:if="${loja.ativo}" class="badge badge-success">Ativa</span>
