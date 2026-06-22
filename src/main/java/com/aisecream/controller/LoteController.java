@@ -35,7 +35,7 @@ public class LoteController {
     }
 
     @GetMapping("/novo")
-    @PreAuthorize("hasRole('ADMIN')")
+    // @PreAuthorize("hasRole('ADMIN')")
     public String novoForm(Model model) {
         LoteProducaoForm form = new LoteProducaoForm();
         form.setDataProducao(LocalDate.now());
