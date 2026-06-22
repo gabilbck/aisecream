@@ -45,7 +45,7 @@ public class LoteController {
     }
 
     @PostMapping("/novo")
-    @PreAuthorize("hasRole('ADMIN')")
+    // @PreAuthorize("hasRole('ADMIN')")
     public String salvar(@Valid @ModelAttribute("loteForm") LoteProducaoForm form,
                          BindingResult result,
                          Model model,

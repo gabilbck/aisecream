@@ -46,7 +46,7 @@
 
         <div class="header-row">
             <h1>Lotes de produção</h1>
-            <a sec:authorize="hasRole('ADMIN')" th:href="@{/lotes/novo}" class="btn btn-primary">+ Novo lote</a>
+            <a th:href="@{/lotes/novo}" class="btn btn-primary">+ Novo lote</a>
         </div>
 
         <div th:if="${sucesso}" class="alert alert-success" th:text="${sucesso}"></div>

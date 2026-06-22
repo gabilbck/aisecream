@@ -7,17 +7,8 @@
     <list default="true" id="3b7c2b9a-5cbd-466b-97cf-d2a111afbbb1" name="Changes" comment="Adicionando CI/CD">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/aisecream/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/aisecream/config/SecurityConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/aisecream/controller/DistribuicaoController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/aisecream/controller/DistribuicaoController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/aisecream/controller/LojaController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/aisecream/controller/LojaController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/aisecream/controller/LoteController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/aisecream/controller/LoteController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/baixa/listar.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/baixa/listar.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/distribuicao/listar.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/distribuicao/listar.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/estoque/atual.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/estoque/atual.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/fragments/nav.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/fragments/nav.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/loja/listar.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/loja/listar.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/templates/lote/listar.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/lote/listar.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/sabor/listar.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/sabor/listar.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/usuario/listar.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/usuario/listar.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
