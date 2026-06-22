@@ -39,6 +39,7 @@
         .header-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 12px; }
         .num { text-align: right; font-variant-numeric: tabular-nums; }
     </style>
+    <style th:replace="~{fragments/table-search :: styles}"></style>
 </head>
 <body>
 
@@ -55,7 +56,9 @@
         <div th:if="${sucesso}" class="alert alert-success" th:text="${sucesso}"></div>
         <div th:if="${erro}" class="alert alert-danger" th:text="${erro}"></div>
 
-        <table>
+        <div th:replace="~{fragments/table-search :: bar('tabela-distribuicoes')}"></div>
+
+        <table id="tabela-distribuicoes">
             <thead>
                 <tr>
                     <th>#</th>
@@ -72,12 +75,12 @@
                 </tr>
             </thead>
             <tbody>
-                <tr th:if="${#lists.isEmpty(distribuicoes)}">
+                <tr th:if="${#lists.isEmpty(distribuicoes)}" class="empty-state-row">
                     <td colspan="11" style="text-align:center; color:#999; padding: 24px;">
                         Nenhuma distribuição registrada ainda.
                     </td>
                 </tr>
-                <tr th:each="d : ${distribuicoes}">
+                <tr th:each="d : ${distribuicoes}" class="data-row">
                     <td th:text="${d.id}"></td>
                     <td th:text="${d.lote.id}"></td>
                     <td th:text="${d.lote.sabor.nome}"></td>
@@ -92,13 +95,15 @@
                     <td th:text="${#temporals.format(d.distribuidoEm, 'dd/MM/yyyy HH:mm')}"></td>
                     <td th:text="${d.criadoPor.nome}"></td>
                     <td>
-                        <form th:if="${d.status.name() == 'ATIVA'}"
+                        <form sec:authorize="hasRole('ADMIN')"
+                              th:if="${d.status.name() == 'ATIVA'}"
                               th:action="@{/distribuicoes/cancelar/{id}(id=${d.id})}"
                               method="post"
                               onsubmit="return confirm('Cancelar esta distribuição? O saldo voltará ao lote no estoque disponível.')">
                             <button type="submit" class="btn btn-danger">Cancelar</button>
                         </form>
                         <span th:if="${d.status.name() == 'CANCELADA'}" style="color:#999;">—</span>
+                        <span sec:authorize="!hasRole('ADMIN')" th:if="${d.status.name() == 'ATIVA'}" style="color:#999;">—</span>
                     </td>
                 </tr>
             </tbody>
@@ -107,5 +112,6 @@
     </div>
 </div>
 
+<script th:replace="~{fragments/table-search :: script}"></script>
 </body>
 </html>

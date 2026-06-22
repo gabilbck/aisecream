@@ -28,8 +28,9 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/login", "/auth/login", "/error", "/acesso-negado").permitAll()
                         .requestMatchers("/usuarios/**").hasRole("ADMIN")
-                        .requestMatchers("/lojas/**").hasRole("ADMIN")
-                        .requestMatchers("/distribuicoes/**").hasRole("ADMIN")
+                        .requestMatchers("/lojas/novo", "/lojas/editar/**", "/lojas/inativar/**").hasRole("ADMIN")
+                        .requestMatchers("/distribuicoes/cancelar/**").hasRole("ADMIN")
+                        .requestMatchers("/lotes/novo").hasRole("ADMIN")
                         .requestMatchers("/sabores/novo", "/sabores/editar/**").hasRole("ADMIN")
                         .requestMatchers("/sabores/inativar/**").hasRole("ADMIN")
                         .anyRequest().authenticated())

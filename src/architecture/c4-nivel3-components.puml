@@ -5,60 +5,71 @@ LAYOUT_WITH_LEGEND()
 
 title Diagrama de Componentes — Aí 'Se Cream (C4 Nível 3)
 
-Person(admin, "Administrador", "Gerencia lojas, lotes, distribuições e usuários.")
-Person(operador, "Operador de Produção", "Registra lotes de produção e baixas de estoque.")
+Person(admin, "Administrador", "Acesso total: CRUD de sabores, lojas, lotes, operadores; cancelar distribuições.")
+Person(operador, "Operador de Produção", "Visualiza módulos (exceto operadores). Cria distribuições e baixas.")
 
 ContainerDb(db, "Banco de Dados", "MariaDB", "Armazena todos os dados do sistema. Schema versionado pelo Flyway.")
 
-Container_Boundary(api, "API REST — Java 21 · Spring Boot 3") {
+Container_Boundary(web, "Aplicação Web — Java 21 · Spring Boot 4 · Spring MVC") {
 
     ' ─── Segurança ───────────────────────────────────────────────
-    Component(securityConfig,   "SecurityConfig",         "Spring Security · @Configuration", "Configura filtros HTTP, rotas públicas/protegidas e controle de acesso por perfil (ADMIN / OPERADOR).")
-    Component(jwtFilter,        "JwtAuthFilter",          "OncePerRequestFilter",              "Intercepta cada requisição, extrai e valida o token JWT, e carrega o contexto de segurança.")
-    Component(jwtService,       "JwtService",             "Componente Spring",                 "Gera, assina e valida tokens JWT. Lê segredo e expiração do application.properties.")
-    Component(authController,   "AuthController",         "REST Controller · /auth",           "Endpoint de login: recebe e-mail + senha, autentica e retorna o token JWT.")
+    Component(securityConfig,   "SecurityConfig",         "Spring Security · @Configuration", "Rotas públicas, RBAC por perfil e página de acesso negado.")
+    Component(jwtFilter,        "JwtAuthFilter",          "OncePerRequestFilter",              "Valida JWT do cookie e carrega o contexto de segurança.")
+    Component(jwtService,       "JwtService",             "Componente Spring",                 "Gera, assina e valida tokens JWT.")
+    Component(authController,   "AuthController",         "REST · /auth/login",                "Login JSON: e-mail + senha → JWT.")
+    Component(loginController,  "LoginController",        "MVC · /login",                      "Página de login Thymeleaf.")
+
+    ' ─── Estoque ─────────────────────────────────────────────────
+    Component(estoqueController,"EstoqueController",      "MVC · /, /estoque",                 "Visão consolidada do CD e das lojas.")
 
     ' ─── Sabores ─────────────────────────────────────────────────
-    Component(saborController,  "SaborController",        "REST Controller · /sabores",        "CRUD de sabores: cadastrar, listar, editar e inativar.")
-    Component(saborService,     "SaborService",           "Service · @Transactional",          "Regras de negócio de sabores: validação de nome único, controle de status ativo/inativo.")
-    Component(saborRepo,        "SaborRepository",        "JpaRepository<Sabor, Long>",        "Acesso ao banco para a entidade Sabor.")
+    Component(saborController,  "SaborController",        "MVC · /sabores",                    "Listar (todos); CRUD e inativar (ADMIN).")
+    Component(saborService,     "SaborService",           "Service · @Transactional",          "Validação de nome único e status ativo/inativo.")
+    Component(saborRepo,        "SaborRepository",        "JpaRepository<Sabor>",              "Persistência de Sabor.")
 
-    ' ─── Lotes de Produção ───────────────────────────────────────
-    Component(loteController,   "LoteProducaoController", "REST Controller · /lotes",          "Registra lotes de produção e lista com filtros por sabor, status e período.")
-    Component(loteService,      "LoteProducaoService",    "Service · @Transactional",          "Calcula e atualiza quantidade disponível do lote. Garante atomicidade.")
-    Component(loteRepo,         "LoteProducaoRepository", "JpaRepository<LoteProducao, Long>", "Acesso ao banco para a entidade LoteProducao.")
+    ' ─── Lotes ───────────────────────────────────────────────────
+    Component(loteController,   "LoteController",         "MVC · /lotes",                      "Listar (todos); criar lote (ADMIN).")
+    Component(loteService,      "LoteService",            "Service · @Transactional",          "Saldo disponível do lote; atomicidade.")
+    Component(loteRepo,         "LoteProducaoRepository", "JpaRepository<LoteProducao>",       "Persistência de LoteProducao.")
 
     ' ─── Lojas ───────────────────────────────────────────────────
-    Component(lojaController,   "LojaController",         "REST Controller · /lojas",          "CRUD de lojas: cadastrar, listar e editar.")
-    Component(lojaService,      "LojaService",            "Service · @Transactional",          "Regras de negócio de lojas: validação de dados e controle de status ativo.")
-    Component(lojaRepo,         "LojaRepository",         "JpaRepository<Loja, Long>",         "Acesso ao banco para a entidade Loja.")
+    Component(lojaController,   "LojaController",         "MVC · /lojas",                      "Listar (todos); CRUD e inativar (ADMIN).")
+    Component(lojaService,      "LojaService",            "Service · @Transactional",          "Validação e endereço estruturado.")
+    Component(lojaRepo,         "LojaRepository",         "JpaRepository<Loja>",               "Persistência de Loja.")
 
     ' ─── Distribuição ────────────────────────────────────────────
-    Component(distController,   "DistribuicaoController", "REST Controller · /distribuicoes",  "Registra distribuições, lista histórico e cancela distribuições.")
-    Component(distService,      "DistribuicaoService",    "Service · @Transactional",          "Valida saldo do lote antes de distribuir. Estorna saldo no cancelamento. Garante atomicidade da operação.")
-    Component(distRepo,         "DistribuicaoRepository", "JpaRepository<Distribuicao, Long>", "Acesso ao banco para a entidade Distribuicao.")
+    Component(distController,   "DistribuicaoController", "MVC · /distribuicoes",              "Listar e registrar (ADMIN/OPERADOR); cancelar (ADMIN).")
+    Component(distService,      "DistribuicaoService",    "Service · @Transactional",          "Valida saldo; estorno no cancelamento.")
+    Component(distRepo,         "DistribuicaoRepository", "JpaRepository<Distribuicao>",       "Persistência de Distribuicao.")
 
-    ' ─── Estoque / Baixas ────────────────────────────────────────
-    Component(baixaController,  "BaixaEstoqueController", "REST Controller · /baixas",         "Registra baixas manuais de estoque e lista histórico por loja e período.")
-    Component(baixaService,     "BaixaEstoqueService",    "Service · @Transactional",          "Calcula saldo atual da loja (total recebido − total de baixas). Garante atomicidade.")
-    Component(baixaRepo,        "BaixaEstoqueRepository", "JpaRepository<BaixaEstoque, Long>", "Acesso ao banco para a entidade BaixaEstoque.")
+    ' ─── Baixas ──────────────────────────────────────────────────
+    Component(baixaController,  "BaixaEstoqueController", "MVC · /baixas",                     "Registrar baixa e listar histórico (ADMIN/OPERADOR).")
+    Component(baixaService,     "BaixaEstoqueService",    "Service · @Transactional",          "Saldo da loja; atomicidade.")
+    Component(baixaRepo,        "BaixaEstoqueRepository", "JpaRepository<BaixaEstoque>",      "Persistência de BaixaEstoque.")
 
     ' ─── Usuários ────────────────────────────────────────────────
-    Component(usuarioService,   "UsuarioService",         "UserDetailsService",                "Carrega usuário pelo e-mail para autenticação. Gerencia cadastro com hash BCrypt.")
-    Component(usuarioRepo,      "UsuarioRepository",      "JpaRepository<Usuario, Long>",      "Acesso ao banco para a entidade Usuario.")
+    Component(usuarioController,"UsuarioController",      "MVC · /usuarios",                   "CRUD de operadores (ADMIN).")
+    Component(usuarioService,   "UsuarioService",         "UserDetailsService",                "Autenticação e cadastro com BCrypt.")
+    Component(usuarioRepo,      "UsuarioRepository",      "JpaRepository<Usuario>",            "Persistência de Usuario.")
 
 }
 
 ' ─── Pessoas → Controllers ────────────────────────────────────────────────────
-Rel(admin,    authController,   "POST /auth/login",             "HTTPS / JSON")
-Rel(operador, authController,   "POST /auth/login",             "HTTPS / JSON")
-Rel(admin,    saborController,  "CRUD /sabores",                "HTTPS / JSON")
-Rel(admin,    loteController,   "GET /lotes",                   "HTTPS / JSON")
-Rel(operador, loteController,   "POST /lotes",                  "HTTPS / JSON")
-Rel(admin,    lojaController,   "CRUD /lojas",                  "HTTPS / JSON")
-Rel(admin,    distController,   "CRUD /distribuicoes",          "HTTPS / JSON")
-Rel(operador, baixaController,  "POST /baixas",                 "HTTPS / JSON")
-Rel(admin,    baixaController,  "GET /baixas",                  "HTTPS / JSON")
+Rel(admin,    authController,    "POST /auth/login",              "JSON")
+Rel(operador, authController,    "POST /auth/login",              "JSON")
+Rel(admin,    estoqueController, "GET /estoque",                  "HTML")
+Rel(operador, estoqueController, "GET /estoque",                  "HTML")
+Rel(admin,    saborController,   "CRUD /sabores",                 "HTML")
+Rel(operador, saborController,   "GET /sabores",                  "HTML")
+Rel(admin,    loteController,    "GET/POST /lotes",               "HTML")
+Rel(operador, loteController,    "GET /lotes",                    "HTML")
+Rel(admin,    lojaController,    "CRUD /lojas",                   "HTML")
+Rel(operador, lojaController,    "GET /lojas",                    "HTML")
+Rel(admin,    distController,    "GET/POST /distribuicoes",       "HTML")
+Rel(operador, distController,    "GET/POST /distribuicoes",       "HTML")
+Rel(admin,    baixaController,   "GET/POST /baixas",              "HTML")
+Rel(operador, baixaController,   "GET/POST /baixas",              "HTML")
+Rel(admin,    usuarioController, "CRUD /usuarios",                "HTML")
 
 ' ─── Segurança ────────────────────────────────────────────────────────────────
 Rel(jwtFilter,      jwtService,     "Valida token JWT")
@@ -68,11 +79,14 @@ Rel(authController, jwtService,     "Solicita geração do token")
 Rel(securityConfig, jwtFilter,      "Registra filtro na cadeia HTTP")
 
 ' ─── Controllers → Services ───────────────────────────────────────────────────
+Rel(estoqueController, loteService,   "Consulta saldos")
+Rel(estoqueController, baixaService,  "Consulta saldos por loja")
 Rel(saborController, saborService,  "Delega regras de negócio")
 Rel(loteController,  loteService,   "Delega regras de negócio")
 Rel(lojaController,  lojaService,   "Delega regras de negócio")
 Rel(distController,  distService,   "Delega regras de negócio")
 Rel(baixaController, baixaService,  "Delega regras de negócio")
+Rel(usuarioController, usuarioService, "Delega cadastro")
 
 ' ─── Services → Repositories ──────────────────────────────────────────────────
 Rel(saborService,   saborRepo,   "Lê e escreve", "JPA")

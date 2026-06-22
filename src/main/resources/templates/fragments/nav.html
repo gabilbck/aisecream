@@ -5,9 +5,9 @@
     <a class="brand" th:href="@{/estoque}">Aí 'Se Cream</a>
     <a class="nav-home" th:href="@{/estoque}">Estoque atual</a>
     <a th:href="@{/sabores}">Sabores</a>
-    <a sec:authorize="hasRole('ADMIN')" th:href="@{/lojas}">Lojas</a>
+    <a th:href="@{/lojas}">Lojas</a>
     <a th:href="@{/lotes}">Lotes</a>
-    <a sec:authorize="hasRole('ADMIN')" th:href="@{/distribuicoes}">Distribuições</a>
+    <a th:href="@{/distribuicoes}">Distribuições</a>
     <a th:href="@{/baixas}">Baixas</a>
     <a sec:authorize="hasRole('ADMIN')" th:href="@{/usuarios}">Operadores</a>
     <span class="nav-spacer"></span>

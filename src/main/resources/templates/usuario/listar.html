@@ -38,6 +38,7 @@
         .alert-danger { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
         .header-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 12px; }
     </style>
+    <style th:replace="~{fragments/table-search :: styles}"></style>
 </head>
 <body>
 
@@ -53,7 +54,9 @@
         <div th:if="${sucesso}" class="alert alert-success" th:text="${sucesso}"></div>
         <div th:if="${erro}" class="alert alert-danger" th:text="${erro}"></div>
 
-        <table>
+        <div th:replace="~{fragments/table-search :: bar('tabela-operadores')}"></div>
+
+        <table id="tabela-operadores">
             <thead>
                 <tr>
                     <th>#</th>
@@ -64,12 +67,12 @@
                 </tr>
             </thead>
             <tbody>
-                <tr th:if="${#lists.isEmpty(operadores)}">
+                <tr th:if="${#lists.isEmpty(operadores)}" class="empty-state-row">
                     <td colspan="5" style="text-align:center; color:#999; padding: 24px;">
                         Nenhum operador cadastrado.
                     </td>
                 </tr>
-                <tr th:each="op : ${operadores}">
+                <tr th:each="op : ${operadores}" class="data-row">
                     <td th:text="${op.id}"></td>
                     <td th:text="${op.nome}"></td>
                     <td th:text="${op.email}"></td>
@@ -86,5 +89,6 @@
     </div>
 </div>
 
+<script th:replace="~{fragments/table-search :: script}"></script>
 </body>
 </html>

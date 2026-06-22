@@ -41,6 +41,7 @@
         .filter-bar select { min-width: 220px; padding: 8px 10px; border-radius: 5px; border: 1px solid #ccc; font-size: 14px; }
         .obs-cell { max-width: 280px; word-break: break-word; color: #555; font-size: 13px; }
     </style>
+    <style th:replace="~{fragments/table-search :: styles}"></style>
 </head>
 <body>
 
@@ -72,7 +73,9 @@
             <a th:href="@{/baixas}" class="btn btn-secondary">Limpar</a>
         </form>
 
-        <table>
+        <div th:replace="~{fragments/table-search :: bar('tabela-baixas')}"></div>
+
+        <table id="tabela-baixas">
             <thead>
                 <tr>
                     <th>#</th>
@@ -86,12 +89,12 @@
                 </tr>
             </thead>
             <tbody>
-                <tr th:if="${#lists.isEmpty(baixas)}">
+                <tr th:if="${#lists.isEmpty(baixas)}" class="empty-state-row">
                     <td colspan="8" style="text-align:center; color:#999; padding: 24px;">
                         Nenhuma baixa registrada<span th:if="${lojaIdFiltro != null}"> para esta loja</span>.
                     </td>
                 </tr>
-                <tr th:each="b : ${baixas}">
+                <tr th:each="b : ${baixas}" class="data-row">
                     <td th:text="${b.id}"></td>
                     <td th:text="${#temporals.format(b.criadoEm, 'dd/MM/yyyy HH:mm')}"></td>
                     <td th:text="${b.loja.nome}"></td>
@@ -107,5 +110,6 @@
     </div>
 </div>
 
+<script th:replace="~{fragments/table-search :: script}"></script>
 </body>
 </html>

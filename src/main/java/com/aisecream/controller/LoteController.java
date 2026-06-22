@@ -4,6 +4,7 @@ import com.aisecream.dto.LoteProducaoForm;
 import com.aisecream.service.LoteService;
 import com.aisecream.service.SaborService;
 import jakarta.validation.Valid;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -34,6 +35,7 @@ public class LoteController {
     }
 
     @GetMapping("/novo")
+    @PreAuthorize("hasRole('ADMIN')")
     public String novoForm(Model model) {
         LoteProducaoForm form = new LoteProducaoForm();
         form.setDataProducao(LocalDate.now());
@@ -43,6 +45,7 @@ public class LoteController {
     }
 
     @PostMapping("/novo")
+    @PreAuthorize("hasRole('ADMIN')")
     public String salvar(@Valid @ModelAttribute("loteForm") LoteProducaoForm form,
                          BindingResult result,
                          Model model,

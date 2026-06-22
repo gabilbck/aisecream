@@ -35,6 +35,7 @@
         .header-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 12px; }
         .num { text-align: right; font-variant-numeric: tabular-nums; }
     </style>
+    <style th:replace="~{fragments/table-search :: styles}"></style>
 </head>
 <body>
 
@@ -45,13 +46,15 @@
 
         <div class="header-row">
             <h1>Lotes de produção</h1>
-            <a th:href="@{/lotes/novo}" class="btn btn-primary">+ Novo lote</a>
+            <a sec:authorize="hasRole('ADMIN')" th:href="@{/lotes/novo}" class="btn btn-primary">+ Novo lote</a>
         </div>
 
         <div th:if="${sucesso}" class="alert alert-success" th:text="${sucesso}"></div>
         <div th:if="${erro}" class="alert alert-danger" th:text="${erro}"></div>
 
-        <table>
+        <div th:replace="~{fragments/table-search :: bar('tabela-lotes')}"></div>
+
+        <table id="tabela-lotes">
             <thead>
                 <tr>
                     <th>#</th>
@@ -63,12 +66,12 @@
                 </tr>
             </thead>
             <tbody>
-                <tr th:if="${#lists.isEmpty(lotes)}">
+                <tr th:if="${#lists.isEmpty(lotes)}" class="empty-state-row">
                     <td colspan="6" style="text-align:center; color:#999; padding: 24px;">
                         Nenhum lote cadastrado ainda.
                     </td>
                 </tr>
-                <tr th:each="l : ${lotes}">
+                <tr th:each="l : ${lotes}" class="data-row">
                     <td th:text="${l.id}"></td>
                     <td th:text="${l.sabor.nome}"></td>
                     <td class="num" th:text="${l.quantidadeProduzida}"></td>
@@ -82,5 +85,6 @@
     </div>
 </div>
 
+<script th:replace="~{fragments/table-search :: script}"></script>
 </body>
 </html>

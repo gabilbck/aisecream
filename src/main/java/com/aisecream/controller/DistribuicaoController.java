@@ -18,7 +18,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/distribuicoes")
-@PreAuthorize("hasRole('ADMIN')")
 public class DistribuicaoController {
 
     private final DistribuicaoService distribuicaoService;
@@ -69,6 +68,7 @@ public class DistribuicaoController {
     }
 
     @PostMapping("/cancelar/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public String cancelar(@PathVariable Integer id, RedirectAttributes redirectAttributes) {
         try {
             distribuicaoService.cancelar(id);

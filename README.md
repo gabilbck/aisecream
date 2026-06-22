@@ -56,7 +56,7 @@ Legenda de status na implementação atual:
 |----|-----------|--------|
 | RF-03 | Registrar lote de produção informando sabor, quantidade e data | ✅ |
 | RF-04 | Exibir quantidade disponível de cada lote em tempo real | ✅ |
-| RF-05 | Listar lotes com filtros por sabor, status e período | ⚠️ Listagem completa sem filtros |
+| RF-05 | Listar lotes com filtros por sabor, status e período | ⚠️ Listagem completa; pesquisa por texto em todas as colunas (client-side); sem filtros server-side por sabor/status/período |
 
 ### Lojas
 
@@ -69,10 +69,10 @@ Legenda de status na implementação atual:
 
 | ID | Descrição | Status |
 |----|-----------|--------|
-| RF-08 | Registrar distribuição associando lote, loja e quantidade | ✅ Apenas perfil ADMIN |
+| RF-08 | Registrar distribuição associando lote, loja e quantidade | ✅ ADMIN e OPERADOR |
 | RF-09 | Impedir distribuição quando a quantidade exceder o saldo do lote | ✅ |
-| RF-10 | Listar histórico de distribuições com filtros por loja, lote e período | ⚠️ Histórico completo sem filtros |
-| RF-11 | Cancelar distribuição e estornar saldo ao lote de origem | ✅ |
+| RF-10 | Listar histórico de distribuições com filtros por loja, lote e período | ⚠️ Histórico completo; pesquisa por texto em todas as colunas (client-side); sem filtros server-side por loja/lote/período |
+| RF-11 | Cancelar distribuição e estornar saldo ao lote de origem | ✅ Apenas ADMIN |
 
 ### Estoque das Lojas
 
@@ -80,7 +80,13 @@ Legenda de status na implementação atual:
 |----|-----------|--------|
 | RF-15 | Registrar baixa manual de estoque informando loja, lote e quantidade consumida | ✅ |
 | RF-16 | Exibir saldo atual da loja por sabor (total recebido − total de baixas) | ✅ Tela **Estoque atual** (`/estoque`) e fluxo de baixa |
-| RF-17 | Listar histórico de baixas por loja e período | ⚠️ Filtro por loja; sem filtro por período |
+| RF-17 | Listar histórico de baixas por loja e período | ⚠️ Filtro server-side por loja; pesquisa por texto em todas as colunas (client-side); sem filtro por período |
+
+### Pesquisa nas listagens
+
+| ID | Descrição | Status |
+|----|-----------|--------|
+| RF-18 | Campo de pesquisa em Sabores, Lojas, Lotes, Distribuições, Baixas e Operadores, filtrando por qualquer coluna visível da tabela em tempo real | ✅ Fragmento `fragments/table-search.html` |
 
 ### Controle de Acesso
 
@@ -88,7 +94,7 @@ Legenda de status na implementação atual:
 |----|-----------|--------|
 | RF-12 | Autenticar usuários com e-mail e senha, retornando token JWT | ✅ |
 | RF-13 | Perfil ADMIN: acesso total ao sistema | ✅ |
-| RF-14 | Perfil OPERADOR: registro de lotes, baixas e consultas | ✅ Sem lojas, distribuições nem CRUD de sabores |
+| RF-14 | Perfil OPERADOR: visualizar todos os módulos (exceto Operadores); criar distribuições e baixas | ✅ Sem CRUD de sabores/lojas/lotes; sem cancelar distribuições; sem módulo Operadores |
 
 ---
 
@@ -108,16 +114,18 @@ Legenda de status na implementação atual:
 
 ## Implementação atual (resumo)
 
-| Módulo | Rota | Observação |
-|--------|------|------------|
-| Estoque atual | `/`, `/estoque` | Página inicial — CD + lojas |
-| Sabores | `/sabores` | CRUD/inativar: ADMIN |
-| Lotes | `/lotes` | Criar e listar |
-| Lojas | `/lojas` | ADMIN |
-| Distribuições | `/distribuicoes` | ADMIN |
-| Baixas | `/baixas` | Filtro opcional por loja |
-| Operadores | `/usuarios` | ADMIN |
-| Login | `/login`, `/auth/login` | JWT em cookie |
+| Módulo | Rota | ADMIN | OPERADOR |
+|--------|------|-------|----------|
+| Estoque atual | `/`, `/estoque` | Visualizar; atalho para novo lote | Visualizar |
+| Sabores | `/sabores` | CRUD e inativar | Visualizar |
+| Lotes | `/lotes` | Criar e listar | Visualizar |
+| Lojas | `/lojas` | CRUD e inativar | Visualizar |
+| Distribuições | `/distribuicoes` | Criar, listar e cancelar | Criar e listar |
+| Baixas | `/baixas` | Criar e listar | Criar e listar |
+| Operadores | `/usuarios` | CRUD | Sem acesso |
+| Login | `/login`, `/auth/login` | JWT em cookie | JWT em cookie |
+
+Todas as telas de listagem (exceto Estoque atual) possuem campo **Pesquisar**, com filtro instantâneo por qualquer coluna da tabela. Baixas mantém filtro adicional por loja via query string (`?lojaId=`).
 
 **Usuário seed (dev):** `admin@aisecream.com` / `admin123`
 
@@ -175,7 +183,18 @@ Repository (Spring Data JPA)
 MariaDB (Flyway)
 ```
 
-A segurança intercepta requisições via `JwtAuthFilter` e regras em `SecurityConfig`.
+A segurança intercepta requisições via `JwtAuthFilter` e regras em `SecurityConfig`:
+
+| Rota / ação | ADMIN | OPERADOR |
+|-------------|-------|----------|
+| `/usuarios/**` | ✅ | ❌ |
+| `/lojas/novo`, `/editar/**`, `/inativar/**` | ✅ | ❌ |
+| `/lotes/novo` | ✅ | ❌ |
+| `/sabores/novo`, `/editar/**`, `/inativar/**` | ✅ | ❌ |
+| `/distribuicoes/cancelar/**` | ✅ | ❌ |
+| `/distribuicoes/novo` (GET/POST) | ✅ | ✅ |
+| `/baixas/**` | ✅ | ✅ |
+| Demais rotas autenticadas (listagens, estoque) | ✅ | ✅ |
 
 Diagramas C4 em `src/architecture/` (`c4-nivel2-containers.puml`, `c4-nivel3-components.puml`).
 
@@ -187,7 +206,7 @@ Diagramas C4 em `src/architecture/` (`c4-nivel2-containers.puml`, `c4-nivel3-com
 |--------|----------|
 | V1 | Tabelas base do domínio |
 | V2 | Usuário administrador inicial |
-| V3 | Campos históricos em `distribuicao` |
+| V3 | Registro histórico de saldo do CD em `distribuicao` |
 | V4 | Endereço estruturado em `loja` |
 
 `spring.jpa.hibernate.ddl-auto=validate` — alterações de schema apenas via Flyway.
@@ -258,6 +277,16 @@ src/main/resources/
 ├── application.properties
 ├── db/migration/
 └── templates/
+    ├── fragments/   # nav, table-search
+    ├── estoque/
+    ├── sabor/
+    ├── lote/
+    ├── loja/
+    ├── distribuicao/
+    ├── baixa/
+    └── usuario/
 ```
+
+Documentação funcional complementar: [`relatorio.md`](relatorio.md). Diagramas C4: `src/architecture/`.
 
 Testes automatizados: `AisecreanApplicationTests` (carga de contexto).

@@ -71,8 +71,8 @@
         </div>
 
         <div class="acoes-rapidas">
-            <a th:href="@{/lotes/novo}" class="btn btn-primary">+ Novo lote</a>
-            <a sec:authorize="hasRole('ADMIN')" th:href="@{/distribuicoes/novo}" class="btn btn-primary">Distribuir</a>
+            <a sec:authorize="hasRole('ADMIN')" th:href="@{/lotes/novo}" class="btn btn-primary">+ Novo lote</a>
+            <a th:href="@{/distribuicoes/novo}" class="btn btn-primary">Distribuir</a>
             <a th:href="@{/baixas/novo}" class="btn btn-primary">Registrar baixa</a>
         </div>
     </div>

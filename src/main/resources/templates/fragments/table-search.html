@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<style th:fragment="styles">
+    .search-bar { margin-bottom: 20px; }
+    .search-bar label { font-size: 13px; font-weight: 600; color: #555; display: block; margin-bottom: 6px; }
+    .search-bar input[type="search"] {
+        width: 100%; max-width: 480px; padding: 10px 12px; border-radius: 5px;
+        border: 1px solid #ccc; font-size: 14px; font-family: inherit;
+    }
+    .search-bar input[type="search"]:focus {
+        outline: none; border-color: #1a1a2e; box-shadow: 0 0 0 2px rgba(26, 26, 46, 0.15);
+    }
+    tr.no-search-results td { text-align: center; color: #999; padding: 24px; }
+</style>
+
+<div th:fragment="bar(tableId)" class="search-bar">
+    <label th:for="${'search-' + tableId}">Pesquisar</label>
+    <input type="search"
+           th:id="${'search-' + tableId}"
+           th:attr="data-table-id=${tableId}"
+           placeholder="Filtrar por qualquer coluna..."
+           autocomplete="off">
+</div>
+
+<script th:fragment="script">
+(function () {
+    document.querySelectorAll('input[type="search"][data-table-id]').forEach(function (input) {
+        var table = document.getElementById(input.getAttribute('data-table-id'));
+        if (!table) return;
+
+        var tbody = table.querySelector('tbody');
+        var dataRows = tbody.querySelectorAll('tr.data-row');
+        var emptyRow = tbody.querySelector('tr.empty-state-row');
+        var noResultsRow = tbody.querySelector('tr.no-search-results');
+
+        if (!noResultsRow && dataRows.length > 0) {
+            noResultsRow = document.createElement('tr');
+            noResultsRow.className = 'no-search-results';
+            noResultsRow.style.display = 'none';
+            var colspan = table.querySelectorAll('thead th').length;
+            noResultsRow.innerHTML = '<td colspan="' + colspan + '">Nenhum resultado para a pesquisa.</td>';
+            tbody.appendChild(noResultsRow);
+        }
+
+        input.addEventListener('input', function () {
+            var q = this.value.trim().toLowerCase();
+            if (dataRows.length === 0) return;
+
+            var visible = 0;
+            dataRows.forEach(function (row) {
+                var text = Array.from(row.cells).map(function (td) {
+                    return td.textContent;
+                }).join(' ').toLowerCase();
+                var match = !q || text.indexOf(q) !== -1;
+                row.style.display = match ? '' : 'none';
+                if (match) visible++;
+            });
+
+            if (noResultsRow) {
+                noResultsRow.style.display = (q && visible === 0) ? '' : 'none';
+            }
+            if (emptyRow) {
+                emptyRow.style.display = q ? 'none' : '';
+            }
+        });
+    });
+})();
+</script>
+
+</body>
+</html>
