@@ -56,7 +56,7 @@ Legenda de status na implementação atual:
 |----|-----------|--------|
 | RF-03 | Registrar lote de produção informando sabor, quantidade e data | ✅ |
 | RF-04 | Exibir quantidade disponível de cada lote em tempo real | ✅ |
-| RF-05 | Listar lotes com filtros por sabor, status e período | ⚠️ Listagem completa; pesquisa por texto em todas as colunas (client-side); sem filtros server-side por sabor/status/período |
+| RF-05 | Listar lotes com filtros por sabor, status e período | ✅ |
 
 ### Lojas
 
@@ -71,7 +71,7 @@ Legenda de status na implementação atual:
 |----|-----------|--------|
 | RF-08 | Registrar distribuição associando lote, loja e quantidade | ✅ ADMIN e OPERADOR |
 | RF-09 | Impedir distribuição quando a quantidade exceder o saldo do lote | ✅ |
-| RF-10 | Listar histórico de distribuições com filtros por loja, lote e período | ⚠️ Histórico completo; pesquisa por texto em todas as colunas (client-side); sem filtros server-side por loja/lote/período |
+| RF-10 | Listar histórico de distribuições com filtros por loja, lote e período | ✅ |
 | RF-11 | Cancelar distribuição e estornar saldo ao lote de origem | ✅ Apenas ADMIN |
 
 ### Estoque das Lojas
@@ -80,7 +80,7 @@ Legenda de status na implementação atual:
 |----|-----------|--------|
 | RF-15 | Registrar baixa manual de estoque informando loja, lote e quantidade consumida | ✅ |
 | RF-16 | Exibir saldo atual da loja por sabor (total recebido − total de baixas) | ✅ Tela **Estoque atual** (`/estoque`) e fluxo de baixa |
-| RF-17 | Listar histórico de baixas por loja e período | ⚠️ Filtro server-side por loja; pesquisa por texto em todas as colunas (client-side); sem filtro por período |
+| RF-17 | Listar histórico de baixas por loja e período | ✅ |
 
 ### Pesquisa nas listagens
 
@@ -94,7 +94,7 @@ Legenda de status na implementação atual:
 |----|-----------|--------|
 | RF-12 | Autenticar usuários com e-mail e senha, retornando token JWT | ✅ |
 | RF-13 | Perfil ADMIN: acesso total ao sistema | ✅ |
-| RF-14 | Perfil OPERADOR: visualizar todos os módulos (exceto Operadores); criar distribuições e baixas | ✅ Sem CRUD de sabores/lojas/lotes; sem cancelar distribuições; sem módulo Operadores |
+| RF-14 | Perfil OPERADOR: visualizar todos os módulos (exceto Operadores); criar distribuições e baixas | ✅ |
 
 ---
 
@@ -106,7 +106,7 @@ Legenda de status na implementação atual:
 | RNF-04 | Tokens JWT com expiração configurável (padrão 8h) | Segurança | ✅ `jwt.expiration-ms` |
 | RNF-05 | Endpoints protegidos por autorização baseada em roles (RBAC) | Segurança | ✅ |
 | RNF-06 | Operações de distribuição e baixa atômicas (transação única no banco) | Confiabilidade | ✅ `@Transactional` nos services |
-| RNF-07 | Erros de validação com mensagens descritivas no corpo da resposta | Usabilidade | ⚠️ JSON em `/auth/login`; telas MVC usam mensagens na página |
+| RNF-07 | Erros de validação com mensagens descritivas no corpo da resposta | Usabilidade | ✅ |
 | RNF-08 | Código organizado em camadas: Controller → Service → Repository | Manutenibilidade | ✅ |
 | RNF-09 | Migrações de banco gerenciadas por Flyway | Manutenibilidade | ✅ |
 
